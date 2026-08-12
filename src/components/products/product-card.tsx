@@ -139,7 +139,7 @@ export default function ProductCard({ product }: Props) {
     href={productUrl}
     className="inline-flex text-sm font-semibold text-blue-700 transition hover:text-blue-800 hover:underline"
   >
-            view details
+            view details.
           </Link>
         </div>
       </div>
