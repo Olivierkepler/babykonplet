@@ -10,17 +10,24 @@ export default function RegisterForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    setLoading(true);
     setError("");
     setMessage("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const res = await fetch("/api/auth/register", {
@@ -42,10 +49,14 @@ export default function RegisterForm() {
         return;
       }
 
-      setMessage("Account created successfully! Redirecting to OTP verification...");
+      setMessage(
+        "Account created successfully! Redirecting to OTP verification..."
+      );
 
       setTimeout(() => {
-        router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
+        router.push(
+          `/verify-otp?email=${encodeURIComponent(email)}`
+        );
       }, 1000);
     } catch {
       setError("Something went wrong. Please try again.");
@@ -60,6 +71,7 @@ export default function RegisterForm() {
         <label className="mb-2 block text-sm font-medium text-slate-700">
           Full Name
         </label>
+
         <input
           type="text"
           value={name}
@@ -74,6 +86,7 @@ export default function RegisterForm() {
         <label className="mb-2 block text-sm font-medium text-slate-700">
           Email Address
         </label>
+
         <input
           type="email"
           value={email}
@@ -88,11 +101,27 @@ export default function RegisterForm() {
         <label className="mb-2 block text-sm font-medium text-slate-700">
           Password
         </label>
+
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Create a password"
+          className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-slate-900"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="mb-2 block text-sm font-medium text-slate-700">
+          Confirm Password
+        </label>
+
+        <input
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="Re-enter your password"
           className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-slate-900"
           required
         />

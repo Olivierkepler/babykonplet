@@ -387,7 +387,7 @@ export default function Navbar({
             <span className="mt-1 hidden text-[10px] font-bold uppercase tracking-[0.28em] text-slate-500 sm:block">
               Family Store
             </span> */}
-            <Image src="/images/logo/DJADORWTOBG.png" alt="DJADOR" width={100} height={100} />
+            <Image src="/favicons/favicon-512x512.png" alt="DJADOR" width={100} height={100} />
           </Link>
 
           <form

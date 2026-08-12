@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+
+import { auth } from "../../../../auth";
 import { prisma } from "../../../../lib/prisma";
 
 function makeSlug(name: string) {
@@ -21,6 +23,36 @@ type VariantInput = {
 
 export async function POST(req: Request) {
   try {
+    // --------------------------------------------------
+    // ADMIN AUTHORIZATION
+    // --------------------------------------------------
+
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Unauthorized.",
+        },
+        { status: 401 }
+      );
+    }
+
+    if (session.user.role !== "ADMIN") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Forbidden. Admin access required.",
+        },
+        { status: 403 }
+      );
+    }
+
+    // --------------------------------------------------
+    // PRODUCT CREATION
+    // --------------------------------------------------
+
     const body = await req.json();
 
     const name = String(body.name || "").trim();
@@ -34,8 +66,8 @@ export async function POST(req: Request) {
     const imageUrls = Array.isArray(body.imageUrls)
       ? body.imageUrls
       : Array.isArray(body.images)
-      ? body.images
-      : [];
+        ? body.images
+        : [];
 
     const mainImageUrl =
       imageUrls[0] || String(body.imageUrl || "").trim();
@@ -50,15 +82,20 @@ export async function POST(req: Request) {
       .map((variant) => ({
         size: variant.size ? String(variant.size).trim() : null,
         color: variant.color ? String(variant.color).trim() : null,
+
         stock: Math.max(0, Number(variant.stock || 0)),
+
         price:
           Number(variant.price) > 0
             ? Number(variant.price)
             : null,
+
         sku: variant.sku ? String(variant.sku).trim() : null,
+
         imageUrl: variant.imageUrl
           ? String(variant.imageUrl).trim()
           : null,
+
         isActive:
           typeof variant.isActive === "boolean"
             ? variant.isActive
@@ -77,8 +114,8 @@ export async function POST(req: Request) {
     if (!name || !description || price <= 0) {
       return NextResponse.json(
         {
-          error:
-            "Name, description, and price are required.",
+          success: false,
+          error: "Name, description, and price are required.",
         },
         { status: 400 }
       );
@@ -93,8 +130,8 @@ export async function POST(req: Request) {
     if (uniqueSkuValues.size !== duplicateSkuValues.length) {
       return NextResponse.json(
         {
-          error:
-            "Each variant SKU must be unique.",
+          success: false,
+          error: "Each variant SKU must be unique.",
         },
         { status: 400 }
       );
@@ -108,13 +145,18 @@ export async function POST(req: Request) {
         slug,
         description,
         price,
+
         originalPrice:
           originalPrice > 0 ? originalPrice : null,
+
         brand: brand || null,
         category: category || null,
         subCategory: subCategory || null,
+
         imageUrl: mainImageUrl || null,
+
         stock,
+
         isActive,
 
         images: {
@@ -159,6 +201,7 @@ export async function POST(req: Request) {
     ) {
       return NextResponse.json(
         {
+          success: false,
           error:
             "A variant SKU already exists. Please use a different SKU.",
         },
@@ -168,6 +211,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       {
+        success: false,
         error: "Failed to create product.",
       },
       { status: 500 }

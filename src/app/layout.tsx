@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 
   icons: {
     icon: [
-      { url: "/images/logo/favicon.ico" },
-      { url: "/images/logo/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/images/logo/favicon-16x16.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico" },
+      { url: "/favicons/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
     ],
-    apple: "/images/logo/favicon.ico",
-    shortcut: "/images/logo/favicon.ico",
+    apple: "/favicons/favicon.ico",
+    shortcut: "/favicons/favicon.ico",
   },
 };
 
