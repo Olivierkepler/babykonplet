@@ -66,7 +66,7 @@ export default async function ProfilePage() {
   return (
     <div className="space-y-4">
       {/* PAGE HEADER */}
-      <header className="rounded-xl border border-slate-200 bg-white px-5 py-5 shadow-sm sm:px-6">
+      {/* <header className="rounded-xl border border-slate-200 bg-white px-5 py-5 shadow-sm sm:px-6">
         <p className="text-xs font-bold uppercase tracking-[0.15em] text-amber-700">
           Account settings
         </p>
@@ -79,7 +79,7 @@ export default async function ProfilePage() {
           Manage your personal information, contact details, profile picture,
           and shopping preferences.
         </p>
-      </header>
+      </header> */}
 
       <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_310px]">
         <ProfileForm
@@ -96,7 +96,7 @@ export default async function ProfilePage() {
 
         {/* RIGHT SIDEBAR */}
         <aside className="space-y-4 xl:sticky xl:top-24">
-          <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <section className=" bg-white p-5 shadow-sm">
             <h2 className="text-base font-bold text-slate-950">
               Account details
             </h2>
@@ -168,7 +168,7 @@ export default async function ProfilePage() {
             </dl>
           </section>
 
-          <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="bg-white p-5 shadow-sm">
             <div className="flex items-start gap-3">
               <CheckCircle2
                 className={`mt-0.5 h-5 w-5 shrink-0 ${
@@ -202,7 +202,7 @@ export default async function ProfilePage() {
             </div>
           </section>
 
-          <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <section className=" bg-white p-5 shadow-sm">
             <div className="flex items-start gap-3">
               <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-slate-700" />
 
@@ -219,7 +219,7 @@ export default async function ProfilePage() {
             </div>
           </section>
 
-          <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <section className=" bg-white p-5 shadow-sm">
             <div className="flex items-start gap-3">
               <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-slate-700" />
 

@@ -43,8 +43,8 @@ export default async function AccountLayout({
   }).format(user.createdAt);
 
   return (
-    <main className="min-h-screen bg-[#f6f7f8]">
-      <div className="mx-auto grid w-full max-w-[1600px] items-start gap-5 px-4 py-5 sm:px-6 lg:grid-cols-[270px_minmax(0,1fr)] lg:px-8">
+    <main className="min-h-screen bg-[#ffffff]">
+      <div className="mx-auto grid w-full max-w-full items-start gap-5 px-4 py-5  lg:grid-cols-[270px_minmax(0,1fr)] ">
         <AccountSidebar
           user={{
             name: user.name || "Customer",

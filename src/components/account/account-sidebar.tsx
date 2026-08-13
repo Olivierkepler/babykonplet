@@ -91,7 +91,7 @@ export default function AccountSidebar({ user }: Props) {
   }
 
   return (
-    <aside className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-24">
+    <aside className="overflow-hidden   bg-white  lg:sticky lg:top-24">
       {/* USER INFORMATION */}
       <div className="border-b border-slate-200 p-5">
         <div className="flex items-center gap-4">
@@ -139,13 +139,13 @@ export default function AccountSidebar({ user }: Props) {
                 href={item.href}
                 className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${
                   active
-                    ? "bg-amber-50 text-amber-800"
+                    ? "text-[#ff4f7b] "
                     : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
                 }`}
               >
                 <Icon
                   className={`h-5 w-5 ${
-                    active ? "text-amber-700" : "text-slate-600"
+                    active ? "text-[#ff4f7b] " : "text-slate-600"
                   }`}
                 />
 

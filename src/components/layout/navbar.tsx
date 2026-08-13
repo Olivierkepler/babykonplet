@@ -700,11 +700,11 @@ export default function Navbar({
                       </SectionLabel>
 
                       <AccountLink
-                        href="/profile"
-                        icon={User}
-                        label="My profile"
-                        onClick={closeDesktopMenus}
-                      />
+  href="/account/profile"
+  icon={User}
+  label="My profile"
+  onClick={closeDesktopMenus}
+/>
 
                       <AccountLink
                         href="/orders"

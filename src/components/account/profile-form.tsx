@@ -209,7 +209,7 @@ export default function ProfileForm({ user }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+      className="overflow-hidden  bg-white shadow-sm"
     >
       {/* PROFILE IMAGE */}
       <section className="border-b border-slate-200 p-5 sm:p-6">
