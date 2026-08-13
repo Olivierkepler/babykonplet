@@ -714,7 +714,7 @@ export default function Navbar({
                       />
 
                       <AccountLink
-                        href="/wishlist"
+                        href="/account/wishlist"
                         icon={Heart}
                         label="Wishlist"
                         badge={wishlistCount}
@@ -788,7 +788,7 @@ export default function Navbar({
 
             {/* Wishlist */}
             <HeaderIconLink
-              href="/wishlist"
+              href="/account/wishlist"
               label="Wishlist"
               count={wishlistCount}
               className={iconActionClass}
@@ -867,7 +867,7 @@ export default function Navbar({
           {/* Mobile quick actions */}
           <div className="ml-auto flex items-center gap-1 lg:hidden">
             <Link
-              href="/wishlist"
+              href="/account/wishlist"
               aria-label={`Wishlist${
                 wishlistCount
                   ? `, ${wishlistCount} items`

@@ -221,7 +221,7 @@ export default function ProfileForm({ user }: Props) {
           Add a photo to personalize your customer account.
         </p>
 
-        <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-center">
+        {/* <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-center">
           <div className="relative w-fit shrink-0">
             {previewImage ? (
               <img
@@ -283,8 +283,8 @@ export default function ProfileForm({ user }: Props) {
               onChange={handleImageSelection}
               className="hidden"
             />
-          </div>
-        </div>
+          </div> 
+        </div> */}
       </section>
 
       {/* PERSONAL INFORMATION */}
