@@ -40,13 +40,23 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-slate-100  ">
+    <footer
+      className="border-t border-slate-100 relative mt-20"
+      style={{
+        backgroundImage: "url(/images/fashion/bluebg.png)",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        opacity: 0.80,
+      }}
+ 
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Newsletter */}
         <div className="py-10">
-          <div className="relative overflow-hidden bg-[#EAF4F8] px-6 py-10 sm:px-10 lg:flex lg:items-center lg:justify-between lg:px-12">
+          <div className="relative overflow-hidden  px-6 py-10 sm:px-10 lg:flex lg:items-center lg:justify-between lg:px-12">
             {/* Decorative elements */}
-            <div
+            {/* <div
               aria-hidden="true"
               className="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-[#FDECEC]/70 blur-2xl"
             />
@@ -54,12 +64,12 @@ export default function Footer() {
             <div
               aria-hidden="true"
               className="absolute -bottom-12 left-1/3 h-32 w-32 rounded-full bg-[#FFF3C4]/80 blur-2xl"
-            />
+            /> */}
 
             <div className="relative max-w-xl">
-              <span className="inline-flex items-center rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-[#6193B7] shadow-sm">
+              {/* <span className="inline-flex items-center rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-[#6193B7] shadow-sm">
                 Stay connected
-              </span>
+              </span> */}
 
               <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
                 A little joy, delivered to your inbox.
@@ -67,7 +77,7 @@ export default function Footer() {
 
               <p className="mt-3 max-w-lg text-sm leading-6 text-slate-600">
                 Discover new products, family favorites, special offers, and
-                updates from DJADOR FAMILY STORE.
+                updates from Baby Konpe.
               </p>
             </div>
 
@@ -114,9 +124,9 @@ export default function Footer() {
               href="/"
               className="inline-flex items-center text-xl font-bold tracking-tight text-slate-900"
             >
-              DJADOR
+              Baby Konple
               <span className="ml-1.5 font-medium text-[#63A0C7]">
-                FAMILY STORE
+                Store
               </span>
             </Link>
 
@@ -187,7 +197,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-slate-400">
-            © {year} DJADOR FAMILY STORE. All rights reserved.
+            © {year} Baby Konple. All rights reserved.
           </p>
 
           <div className="flex flex-wrap items-center gap-5">

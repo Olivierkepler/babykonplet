@@ -77,7 +77,7 @@ const sections: Section[] = [
   {
     title: "Beauty & Hair Care",
     background: "image",
-    src: "/images/background.png",
+    src: "/images/fashion/bg1.png",
 
     // Arrow shows Beauty, Hair Care, Wigs and Personal Care only
     href: "/products?section=beauty-care",
@@ -111,8 +111,10 @@ const sections: Section[] = [
   },
   {
     title: "Everyday Essentials",
-    background: "color",
-    color: "#ffffff",
+    background: "image",
+    // color: "#ffffff",
+
+    src: "/images/fashion/bg1.png",
 
     // Arrow shows Food, Home, Kitchen and Cleaning only
     href: "/products?section=everyday-essentials",
@@ -346,12 +348,12 @@ function ProductGrid({
             href={`/products/${product.slug}`}
             className="group"
           >
-            <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-xl bg-[#f1f3f6]">
+            <div className="relative flex  items-center justify-center overflow-hidden rounded-xl bg-white">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                  className="h-full w-full object-cover transition duration-300 group-hover:scale-102"
                 />
               ) : (
                 <span className="text-sm font-semibold text-slate-400">
@@ -360,7 +362,9 @@ function ProductGrid({
               )}
             </div>
 
-            <h3 className="mt-2 line-clamp-1 text-sm font-semibold text-slate-900">
+          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-start justify-start">
+          <h3 className="mt-2 line-clamp-1 text-sm font-semibold text-slate-900">
               {product.name}
             </h3>
 
@@ -371,6 +375,8 @@ function ProductGrid({
             <p className="mt-1 text-xs font-semibold text-blue-600">
               Special offer + more
             </p>
+          </div>
+          </div>
           </Link>
         ))}
       </div>
