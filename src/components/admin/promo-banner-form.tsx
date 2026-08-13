@@ -2,6 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  CUSTOM_LINK_VALUE,
+  linkOptions,
+  allKnownLinkValues,
+} from "../../lib/site-links";
 
 type PromoBannerFormProps = {
   bannerId?: string;
@@ -22,52 +27,6 @@ const emptyForm = {
   isActive: true,
 };
 
-const CUSTOM_LINK_VALUE = "__custom__";
-
-// Mirrors the real destinations used across the storefront
-// (category pages, section anchors, and top-level routes) so
-// admins pick a link that's guaranteed to exist rather than
-// hand-typing a path that might not match a real route.
-const linkOptions = [
-  {
-    group: "Category pages",
-    options: [
-      { value: "/products?category=women", label: "Women" },
-      { value: "/products?category=men", label: "Men" },
-      { value: "/products?category=beauty", label: "Beauty" },
-      { value: "/products?category=hair-care", label: "Hair Care" },
-      { value: "/products?category=shoes", label: "Shoes" },
-      { value: "/products?category=bags", label: "Bags" },
-      { value: "/products?category=food-grocery", label: "Food & Grocery" },
-      { value: "/products?category=home-essentials", label: "Home Essentials" },
-      { value: "/products?category=kitchen", label: "Kitchen" },
-      { value: "/products?category=cleaning", label: "Cleaning" },
-      { value: "/products?category=wigs", label: "Wigs" },
-      { value: "/products?category=personal-care", label: "Personal Care" },
-    ],
-  },
-  {
-    group: "Section pages",
-    options: [
-      { value: "/beauty-and-hair-care", label: "Beauty & Hair Care" },
-      { value: "/fashion-finds", label: "Fashion Finds" },
-      { value: "/food-and-grocery", label: "Food & Grocery (section)" },
-      { value: "/home-essentials", label: "Home Essentials (section)" },
-    ],
-  },
-  {
-    group: "Storefront",
-    options: [
-      { value: "/products", label: "All products" },
-      { value: "/products?section=discover", label: "Discover DJADOR" },
-    ],
-  },
-];
-
-const allKnownValues = new Set(
-  linkOptions.flatMap((group) => group.options.map((o) => o.value))
-);
-
 export default function PromoBannerForm({
   bannerId,
   initial,
@@ -84,7 +43,7 @@ export default function PromoBannerForm({
   // known options (or the form is new), default the select to
   // "Custom link" so the existing/typed value isn't silently lost.
   const [linkMode, setLinkMode] = useState<"preset" | "custom">(
-    initial?.href && !allKnownValues.has(initial.href)
+    initial?.href && !allKnownLinkValues.has(initial.href)
       ? "custom"
       : "preset"
   );

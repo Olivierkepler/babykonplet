@@ -2,6 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  CUSTOM_LINK_VALUE,
+  linkOptions,
+  allKnownLinkValues,
+} from "../../lib/site-links";
 
 type AdSlotFormProps = {
   adId?: string;
@@ -31,11 +36,28 @@ export default function AdSlotForm({ adId, initial }: AdSlotFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  const [linkMode, setLinkMode] = useState<"preset" | "custom">(
+    initial?.href && !allKnownLinkValues.has(initial.href)
+      ? "custom"
+      : "preset"
+  );
+
   function updateField<K extends keyof typeof form>(
     key: K,
     value: (typeof form)[K]
   ) {
     setForm((current) => ({ ...current, [key]: value }));
+  }
+
+  function handleLinkSelectChange(value: string) {
+    if (value === CUSTOM_LINK_VALUE) {
+      setLinkMode("custom");
+      updateField("href", "");
+      return;
+    }
+
+    setLinkMode("preset");
+    updateField("href", value);
   }
 
   async function handleImageChange(
@@ -84,7 +106,7 @@ export default function AdSlotForm({ adId, initial }: AdSlotFormProps) {
     }
 
     if (!form.href.trim()) {
-      setError("Please enter a link.");
+      setError("Please choose or enter a link.");
       return;
     }
 
@@ -178,12 +200,39 @@ export default function AdSlotForm({ adId, initial }: AdSlotFormProps) {
             <label className="text-sm font-bold text-slate-900">
               Link (where the ad sends shoppers)
             </label>
-            <input
-              value={form.href}
-              onChange={(e) => updateField("href", e.target.value)}
-              placeholder="/products?category=beauty"
-              className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-green-600"
-            />
+
+            <select
+              value={linkMode === "custom" ? CUSTOM_LINK_VALUE : form.href}
+              onChange={(e) => handleLinkSelectChange(e.target.value)}
+              className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-green-600"
+            >
+              <option value="" disabled>
+                Choose a destination
+              </option>
+
+              {linkOptions.map((group) => (
+                <optgroup key={group.group} label={group.group}>
+                  {group.options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+
+              <option value={CUSTOM_LINK_VALUE}>
+                Custom link…
+              </option>
+            </select>
+
+            {linkMode === "custom" && (
+              <input
+                value={form.href}
+                onChange={(e) => updateField("href", e.target.value)}
+                placeholder="/products?category=beauty"
+                className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-green-600"
+              />
+            )}
           </div>
 
           <div>
