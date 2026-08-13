@@ -6,8 +6,11 @@ export default function LoginPage() {
     <AuthLayout
       title="Welcome back"
       subtitle="Sign in to continue shopping, track your orders, and manage your account."
+    
     >
       <LoginForm />
+
+   
     </AuthLayout>
   );
 }
