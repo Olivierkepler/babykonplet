@@ -880,87 +880,107 @@ export default async function ProductsPage({
         : "All Products";
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-        {/* BREADCRUMB */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-5 flex flex-wrap items-center gap-2 text-sm text-slate-500"
+    <main className="min-h-screen bg-white">
+      <div className="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+      <section className="bg-white px-5 py-6 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)] sm:px-7 sm:py-7">
+  {/* Breadcrumb */}
+  <nav
+    aria-label="Breadcrumb"
+    className="flex flex-wrap items-center gap-2 text-sm text-slate-500"
+  >
+    <Link
+      href="/"
+      className="font-medium transition-colors hover:text-[#63A0C7]"
+    >
+      Home
+    </Link>
+
+    <ChevronRight
+      className="h-4 w-4 text-slate-300"
+      aria-hidden="true"
+    />
+
+    <Link
+      href="/products"
+      className="font-medium transition-colors hover:text-[#63A0C7]"
+    >
+      Products
+    </Link>
+
+    {selectedCategory ? (
+      <>
+        <ChevronRight
+          className="h-4 w-4 text-slate-300"
+          aria-hidden="true"
+        />
+
+        <Link
+          href={`/products?category=${selectedCategory.value}`}
+          className="font-medium text-slate-700 transition-colors hover:text-[#63A0C7]"
         >
-          <Link
-            href="/"
-            className="font-medium transition hover:text-slate-950"
-          >
-            Home
-          </Link>
+          {selectedCategory.name}
+        </Link>
+      </>
+    ) : null}
 
-          <ChevronRight className="h-4 w-4" />
+    {selectedSubcategory ? (
+      <>
+        <ChevronRight
+          className="h-4 w-4 text-slate-300"
+          aria-hidden="true"
+        />
 
-          <Link
-            href="/products"
-            className="font-medium transition hover:text-slate-950"
-          >
-            Products
-          </Link>
+        <span
+          aria-current="page"
+          className="font-semibold text-slate-950"
+        >
+          {selectedSubcategory.name}
+        </span>
+      </>
+    ) : null}
+  </nav>
 
-          {selectedCategory ? (
-            <>
-              <ChevronRight className="h-4 w-4" />
+  {/* Header */}
+  <div className="mt-6 flex flex-col gap-6 border-t border-slate-100 pt-6 sm:flex-row sm:items-end sm:justify-between">
+    {/* <div className="max-w-3xl">
+      <div className="inline-flex items-center gap-2 rounded-full bg-[#EAF4F8] px-3 py-1.5">
+        <span className="h-1.5 w-1.5 rounded-full bg-[#63A0C7]" />
 
-              <Link
-                href={`/products?category=${selectedCategory.value}`}
-                className="font-semibold text-slate-900 transition hover:text-blue-600"
-              >
-                {selectedCategory.name}
-              </Link>
-            </>
-          ) : null}
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#4F8CB5]">
+          Baby Konple Store
+        </p>
+      </div>
 
-          {selectedSubcategory ? (
-            <>
-              <ChevronRight className="h-4 w-4" />
+      <h1 className="mt-4 text-3xl font-bold tracking-[-0.03em] text-slate-950 sm:text-4xl lg:text-[2.6rem]">
+        {pageTitle}
+      </h1>
 
-              <span className="font-semibold text-slate-900">
-                {selectedSubcategory.name}
-              </span>
-            </>
-          ) : null}
-        </nav>
+      <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+        Explore our available products and find the right item for you.
+      </p>
+    </div> */}
 
-        {/* HEADER */}
-        <section className="rounded-2xl border border-slate-200 bg-white px-5 py-6 shadow-sm sm:px-7">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
-                DJADOR Family Store
-              </p>
+   
+<div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+  <h3 className=" font-bold tracking-[-0.03em] text-slate-950 ">
+    {pageTitle}
+  </h3>
 
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
-                {pageTitle}
-              </h1>
+  <div className="inline-flex items-center gap-2 rounded-full border border-[#D9EDF5] bg-[#F2F9FC] px-3 py-1.5">
+    <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-[#A8CFDD] px-1.5 text-xs font-bold text-white">
+      {filteredProducts.length}
+    </span>
 
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                Explore our available products and
-                find the right item for you.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2 text-sm text-slate-600">
-              <span className="font-bold text-slate-950">
-                {filteredProducts.length}
-              </span>
-
-              <span>
-                {filteredProducts.length === 1
-                  ? "product"
-                  : "products"}
-              </span>
-            </div>
-          </div>
-        </section>
+    <span className="text-xs font-semibold tracking-wide text-[#4F819F]">
+      {filteredProducts.length === 1 ? "Product" : "Products"}
+    </span>
+  </div>
+</div>
+  </div>
+</section>
 
         {/* TOOLBAR */}
-        <section className="mt-5 flex flex-col gap-4 rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <section className="mt-5 flex flex-col gap-4  bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-slate-900">
               {filteredProducts.length}{" "}
