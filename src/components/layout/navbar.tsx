@@ -721,13 +721,13 @@ export default function Navbar({
                         onClick={closeDesktopMenus}
                       />
 
-                      <AccountLink
+                      {/* <AccountLink
                         href="/notifications"
                         icon={Bell}
                         label="Notifications"
                         badge={notificationCount}
                         onClick={closeDesktopMenus}
-                      />
+                      /> */}
 
                       <button
                         type="button"
@@ -797,14 +797,14 @@ export default function Navbar({
             </HeaderIconLink>
 
             {/* Notifications */}
-            <HeaderIconLink
-              href="/notifications"
+            {/* <HeaderIconLink
+              href="/account/notifications"
               label="Notifications"
               count={notificationCount}
               className={iconActionClass}
             >
               <Bell className="h-5 w-5 text-[#ff4f7b] hover:text-[#0a2540]" />
-            </HeaderIconLink>
+            </HeaderIconLink> */}
 
             {/* Cart */}
             <Link

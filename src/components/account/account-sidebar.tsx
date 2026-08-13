@@ -102,7 +102,7 @@ export default function AccountSidebar({ user }: Props) {
               className="h-14 w-14 rounded-full border border-slate-200 object-cover"
             />
           ) : (
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-900 text-lg font-semibold text-white">
+            <div className="flex h-14 w-14 items-center justify-center  text-lg font-semibold text-black border border-slate-200 rounded-full">
               {getInitials(user.name)}
             </div>
           )}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import PromoGrid from "../components/home/promo-grid";
 import CollapsibleSidebar from "../components/layout/collapsible-sidebar";
@@ -7,7 +8,7 @@ import { prisma } from "../lib/prisma";
 import { getActivePromoBanners, getActiveAdSlots } from "../lib/content";
 
 const sidebarCategories = [
-  { name: "Discover DJADOR", href: "/products?section=discover", icon: "Store" },
+  { name: "All Products", href: "/products?section=discover", icon: "Store" },
   { name: "Women", href: "/products?category=women", icon: "UserRound" },
   { name: "Men", href: "/products?category=men", icon: "UsersRound" },
   { name: "Beauty", href: "/products?category=beauty", icon: "Sparkles" },
@@ -22,11 +23,27 @@ const sidebarCategories = [
   { name: "Personal Care", href: "/products?category=personal-care", icon: "Sparkles" },
 ] as const;
 
-const sections = [
+type SectionItem = {
+  name: string;
+  offer: string;
+  category: string;
+  href: string;
+};
+
+// A section is either a solid background color, or a background image.
+// Never both — pick one per section.
+type Section = {
+  title: string;
+  href: string;
+  items: SectionItem[];
+} & ({ background: "color"; color: string } | { background: "image"; src: string });
+
+const sections: Section[] = [
   {
     title: "Best Value Deals on Fashion",
-    color: "from-orange-500 to-amber-400",
-
+    background: "image",
+    // color: "#ffffff",
+    src: "/images/fashion/bluebg.png",
     // Arrow shows Women, Men, Shoes and Bags only
     href: "/products?section=fashion",
 
@@ -59,7 +76,8 @@ const sections = [
   },
   {
     title: "Beauty & Hair Care",
-    color: "from-pink-500 to-rose-400",
+    background: "image",
+    src: "/images/background.png",
 
     // Arrow shows Beauty, Hair Care, Wigs and Personal Care only
     href: "/products?section=beauty-care",
@@ -93,7 +111,8 @@ const sections = [
   },
   {
     title: "Everyday Essentials",
-    color: "from-emerald-600 to-green-400",
+    background: "color",
+    color: "#ffffff",
 
     // Arrow shows Food, Home, Kitchen and Cleaning only
     href: "/products?section=everyday-essentials",
@@ -182,7 +201,7 @@ function HomeSection({
   section,
   previews,
 }: {
-  section: (typeof sections)[number];
+  section: Section;
   previews: Record<string, string>;
 }) {
   const availableItems = section.items.filter((item) =>
@@ -193,50 +212,92 @@ function HomeSection({
     return null;
   }
 
+  const isImageBackground = section.background === "image";
+
+  // Light/white color backgrounds need dark heading text; image
+  // backgrounds (with a dark overlay below) and darker colors need
+  // white heading text. Adjust this check if you add darker solid
+  // colors later — for now, only white/near-white is treated as light.
+  const isLightColorBackground =
+    section.background === "color" &&
+    ["#fff", "#ffffff"].includes(section.color.toLowerCase());
+
+  const headingTextClass =
+    isImageBackground || !isLightColorBackground
+      ? "text-[#23425b]"
+ 
+      : "text-slate-950";
+
+  const arrowButtonClass = isLightColorBackground
+    ? "bg-slate-950 text-white shadow hover:bg-slate-800"
+    : "bg-white text-slate-900 shadow hover:bg-slate-100";
+
   return (
     <section
-      className={`mt-6 rounded-2xl bg-gradient-to-r ${section.color} p-4 shadow-sm`}
+      className="relative my-20 overflow-hidden rounded-2xl p-4 shadow-sm"
+      style={
+        section.background === "color"
+          ? { backgroundColor: section.color }
+          : undefined
+      }
     >
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-2xl font-black text-white">
-          {section.title}
-        </h2>
+      {isImageBackground && (
+        <>
+          <Image
+            src={section.src}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+          {/* Dark scrim so the white heading/arrow stay readable
+              regardless of what's in the background image. */}
+          {/* <div className="absolute inset-0 bg-black/35" /> */}
+        </>
+      )}
 
-        <Link
-          href={section.href}
-          aria-label={`View ${section.title}`}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-900 shadow hover:bg-slate-100"
-        >
-          <ArrowRight className="h-5 w-5" />
-        </Link>
+      <div className="relative">
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className={`text-2xl font-black ${headingTextClass}`}>
+            {section.title}
+          </h2>
+
+          <Link
+            href={section.href}
+            aria-label={`View ${section.title}`}
+            className={`flex h-10 w-10 items-center justify-center rounded-full transition ${arrowButtonClass}`}
+          >
+            <ArrowRight className="h-5 w-5" />
+          </Link>
+        </div>
+
+        <div className="grid gap-4 rounded-xl p-3 sm:grid-cols-2 lg:grid-cols-4">
+  {availableItems.map((item) => (
+    <Link
+      key={item.name}
+      href={item.href}
+      className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_10px_-4px_rgba(10,37,64,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-12px_rgba(10,37,64,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
+    >
+      <div className="flex h-72 items-center justify-center overflow-hidden ">
+        <img
+          src={previews[item.category]}
+          alt={item.name}
+          className="max-h-full max-w-full object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-105"
+        />
       </div>
 
-      <div className="grid gap-3 rounded-xl bg-white p-3 sm:grid-cols-2 lg:grid-cols-4">
-        {availableItems.map((item) => (
-          <Link
-            key={item.name}
-            href={item.href}
-            className="group overflow-hidden rounded-lg bg-white transition hover:shadow-md"
-          >
-            <div className="flex h-44 items-center justify-center overflow-hidden rounded-lg bg-[#f1f3f6]">
-              <img
-                src={previews[item.category]}
-                alt={item.name}
-                className="max-h-full max-w-full object-contain transition duration-300 group-hover:scale-105"
-              />
-            </div>
+      <div className="px-3.5 py-3">
+        <h3 className="line-clamp-1 text-[15px] font-semibold text-slate-900">
+          {item.name}
+        </h3>
 
-            <div className="px-1 pt-2">
-              <h3 className="line-clamp-1 text-[15px] font-semibold text-slate-900">
-                {item.name}
-              </h3>
-
-              <p className="mt-0.5 text-[15px] font-black text-slate-950">
-                {item.offer}
-              </p>
-            </div>
-          </Link>
-        ))}
+        <p className="mt-1 text-sm font-bold text-[#ff4f7b]">
+          {item.offer}
+        </p>
+      </div>
+    </Link>
+  ))}
+</div>
       </div>
     </section>
   );

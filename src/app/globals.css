@@ -3,6 +3,20 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand-blue: #63a0c7;
+  --brand-blue-soft: #eaf4f8;
+  --brand-blue-light: #a8cfdd;
+
+  --brand-pink: #e7b09e;
+  --brand-pink-soft: #fdecec;
+
+  --brand-yellow: #f7cc5c;
+  --brand-yellow-soft: #fff3c4;
+
+  --brand-cream: #fff9f2;
+
+  --text-primary: #1f2937;
+  --text-secondary: #64748b;
 }
 
 .dark {

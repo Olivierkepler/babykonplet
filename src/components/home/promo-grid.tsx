@@ -23,6 +23,11 @@ type PromoGridProps = {
   banners: PromoBanner[];
 };
 
+type CarouselButtonProps = {
+  direction: "previous" | "next";
+  onClick: () => void;
+};
+
 const AUTOPLAY_INTERVAL_MS = 5500;
 const RESUME_AFTER_INTERACTION_MS = 7000;
 
@@ -32,26 +37,24 @@ export default function PromoGrid({ banners }: PromoGridProps) {
   const resumeTimeoutRef = useRef<number | null>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
+  const [isHoveredOrFocused, setIsHoveredOrFocused] = useState(false);
   const [isPausedByUser, setIsPausedByUser] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] =
-    useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  function updateIndex(index: number) {
+  const updateIndex = useCallback((index: number) => {
     activeIndexRef.current = index;
     setActiveIndex(index);
-  }
+  }, []);
 
   const scrollToCard = useCallback(
     (index: number) => {
       const container = scrollRef.current;
+
       if (!container) return;
 
-      const card = container.children[index] as
-        | HTMLElement
-        | undefined;
+      const card = container.children.item(index);
 
-      if (!card) return;
+      if (!(card instanceof HTMLElement)) return;
 
       container.scrollTo({
         left: card.offsetLeft,
@@ -60,94 +63,101 @@ export default function PromoGrid({ banners }: PromoGridProps) {
 
       updateIndex(index);
     },
-    [prefersReducedMotion]
+    [prefersReducedMotion, updateIndex]
   );
 
   const step = useCallback(
     (direction: 1 | -1) => {
-      const length = banners.length;
-      if (length === 0) return;
+      const totalSlides = banners.length;
 
-      const current = activeIndexRef.current;
-      const next = (current + direction + length) % length;
+      if (totalSlides === 0) return;
 
-      scrollToCard(next);
+      const currentIndex = activeIndexRef.current;
+
+      const nextIndex =
+        (currentIndex + direction + totalSlides) % totalSlides;
+
+      scrollToCard(nextIndex);
     },
-    [scrollToCard, banners.length]
+    [banners.length, scrollToCard]
   );
 
-  function pauseTemporarily() {
+  const pauseTemporarily = useCallback(() => {
     setIsPausedByUser(true);
 
-    if (resumeTimeoutRef.current) {
+    if (resumeTimeoutRef.current !== null) {
       window.clearTimeout(resumeTimeoutRef.current);
     }
 
     resumeTimeoutRef.current = window.setTimeout(() => {
       setIsPausedByUser(false);
+      resumeTimeoutRef.current = null;
     }, RESUME_AFTER_INTERACTION_MS);
-  }
+  }, []);
 
-  function handlePrevClick() {
+  const handlePrevious = useCallback(() => {
     step(-1);
     pauseTemporarily();
-  }
+  }, [step, pauseTemporarily]);
 
-  function handleNextClick() {
+  const handleNext = useCallback(() => {
     step(1);
     pauseTemporarily();
-  }
+  }, [step, pauseTemporarily]);
 
-  function handleDotClick(index: number) {
-    scrollToCard(index);
-    pauseTemporarily();
-  }
+  const handleDotClick = useCallback(
+    (index: number) => {
+      scrollToCard(index);
+      pauseTemporarily();
+    },
+    [scrollToCard, pauseTemporarily]
+  );
 
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key === "ArrowRight") {
       event.preventDefault();
-      step(1);
-      pauseTemporarily();
+      handleNext();
     }
 
     if (event.key === "ArrowLeft") {
       event.preventDefault();
-      step(-1);
-      pauseTemporarily();
+      handlePrevious();
     }
   }
 
+  // Respect the user's reduced-motion preference.
   useEffect(() => {
-    const query = window.matchMedia(
+    const mediaQuery = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     );
 
-    setPrefersReducedMotion(query.matches);
+    const updateMotionPreference = () => {
+      setPrefersReducedMotion(mediaQuery.matches);
+    };
 
-    function handleChange(event: MediaQueryListEvent) {
-      setPrefersReducedMotion(event.matches);
-    }
+    updateMotionPreference();
 
-    query.addEventListener("change", handleChange);
+    mediaQuery.addEventListener("change", updateMotionPreference);
 
     return () => {
-      query.removeEventListener("change", handleChange);
+      mediaQuery.removeEventListener("change", updateMotionPreference);
     };
   }, []);
 
+  // Autoplay.
   useEffect(() => {
-    if (
+    const shouldPause =
       banners.length <= 1 ||
       prefersReducedMotion ||
-      isHovering ||
-      isPausedByUser
-    ) {
-      return;
-    }
+      isHoveredOrFocused ||
+      isPausedByUser;
+
+    if (shouldPause) return;
 
     const interval = window.setInterval(() => {
-      if (document.hidden) return;
-      step(1);
+      if (!document.hidden) {
+        step(1);
+      }
     }, AUTOPLAY_INTERVAL_MS);
 
     return () => {
@@ -156,50 +166,52 @@ export default function PromoGrid({ banners }: PromoGridProps) {
   }, [
     banners.length,
     prefersReducedMotion,
-    isHovering,
+    isHoveredOrFocused,
     isPausedByUser,
     step,
   ]);
 
+  // Keep active indicator synced with manual scrolling.
   useEffect(() => {
     const container = scrollRef.current;
+
     if (!container) return;
+
+    const cards = Array.from(container.children);
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (
-            entry.isIntersecting &&
-            entry.intersectionRatio >= 0.6
-          ) {
-            const index = Array.from(
-              container.children
-            ).indexOf(entry.target);
-
-            if (index !== -1) {
-              updateIndex(index);
-            }
+        for (const entry of entries) {
+          if (!entry.isIntersecting || entry.intersectionRatio < 0.6) {
+            continue;
           }
-        });
+
+          const index = cards.indexOf(entry.target);
+
+          if (index !== -1) {
+            updateIndex(index);
+          }
+        }
       },
       {
         root: container,
-        threshold: [0.6],
+        threshold: 0.6,
       }
     );
 
-    Array.from(container.children).forEach((child) => {
-      observer.observe(child);
+    cards.forEach((card) => {
+      observer.observe(card);
     });
 
     return () => {
       observer.disconnect();
     };
-  }, [banners.length]);
+  }, [banners.length, updateIndex]);
 
+  // Clear interaction timeout when the component unmounts.
   useEffect(() => {
     return () => {
-      if (resumeTimeoutRef.current) {
+      if (resumeTimeoutRef.current !== null) {
         window.clearTimeout(resumeTimeoutRef.current);
       }
     };
@@ -212,94 +224,101 @@ export default function PromoGrid({ banners }: PromoGridProps) {
   const isProgressAnimating =
     banners.length > 1 &&
     !prefersReducedMotion &&
-    !isHovering &&
+    !isHoveredOrFocused &&
     !isPausedByUser;
 
   return (
     <section
-      aria-roledescription="carousel"
       aria-label="Featured promotions"
+      aria-roledescription="carousel"
       className="group/carousel relative "
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      onMouseEnter={() => setIsHoveredOrFocused(true)}
+      onMouseLeave={() => setIsHoveredOrFocused(false)}
+      onFocusCapture={() => setIsHoveredOrFocused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setIsHoveredOrFocused(false);
+        }
+      }}
     >
+      {/* Slides */}
       <div
         ref={scrollRef}
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        onFocus={() => setIsHovering(true)}
-        onBlur={() => setIsHovering(false)}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-1 outline-none sm:gap-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-1  outline-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-4"
       >
         {banners.map((banner, index) => (
-         <Link
-         key={banner.id}
-         href={banner.href}
-         role="group"
-         aria-roledescription="slide"
-         aria-label={`${index + 1} of ${banners.length}: ${banner.title}`}
-         className="group relative aspect-[16/9] w-[92%] min-w-[92%] shrink-0 snap-start overflow-hidden  transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none   sm:aspect-[16/8.5] sm:w-[49%] sm:min-w-[49%] lg:aspect-[16/8.5] lg:w-[33%] lg:min-w-[33%] xl:aspect-[16/8] xl:w-[33%] xl:min-w-[33%]"
-       >
-         <Image
-           src={banner.imageUrl}
-           alt={banner.title}
-           fill
-           sizes="(max-width: 639px) 92vw, (max-width: 1023px) 49vw, 33vw"
-           priority={index === 0}
-           className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-         />
-       </Link>
+          <Link
+            key={banner.id}
+            href={banner.href}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${index + 1} of ${banners.length}: ${banner.title}`}
+            className="group  relative aspect-[16/9] w-[92%] min-w-[92%] shrink-0 snap-start overflow-hidden rounded-[1.75rem] bg-[#eaf4f8] ring-1 ring-slate-900/[0.04] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_12px_32px_-18px_rgba(15,23,42,0.17)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#74aed2] focus-visible:ring-offset-4 sm:aspect-[16/8.5] sm:w-[49%] sm:min-w-[49%] lg:w-[33%] lg:min-w-[33%] xl:aspect-[16/8] my-4"
+       
+          >
+            <Image
+              src={banner.imageUrl}
+              alt={banner.title}
+              fill
+              priority={index === 0}
+              sizes="(max-width: 639px) 92vw, (max-width: 1023px) 49vw, 33vw"
+              className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025] "
+            />
+
+            {/* Subtle image finish */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/[0.05] via-transparent to-white/[0.03]"
+            />
+          </Link>
         ))}
       </div>
 
       {banners.length > 1 && (
         <>
-          <button
-            type="button"
-            onClick={handlePrevClick}
-            aria-label="Previous promotion"
-            className="absolute left-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/30 text-[#082b55] opacity-0 shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105  cursor-pointer hover:text-[#ff4f7b] active:scale-95 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] group-hover/carousel:opacity-100 lg:flex"
+          {/* Desktop navigation */}
+          <CarouselButton
+            direction="previous"
+            onClick={handlePrevious}
+          />
+
+          <CarouselButton
+            direction="next"
+            onClick={handleNext}
+          />
+
+          {/* Pagination */}
+          <div
+            className="mt-5 flex items-center justify-center gap-2"
+            aria-label="Choose promotion"
           >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-
-          <button
-            type="button"
-            onClick={handleNextClick}
-            aria-label="Next promotion"
-            className="absolute right-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/30 text-[#082b55] opacity-0 shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105  cursor-pointer hover:text-[#ff4f7b] active:scale-95 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] group-hover/carousel:opacity-100 lg:flex"
-              >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-
-          <div className="mt-4 flex items-center justify-center gap-2">
             {banners.map((banner, index) => {
               const isActive = activeIndex === index;
+
+              const indicatorClassName = isActive
+                ? "w-9 bg-[#e9f4fa]"
+                : "w-1.5 bg-[#dceaf3] hover:scale-125 hover:bg-[#f8cbd5]";
 
               return (
                 <button
                   key={banner.id}
                   type="button"
                   onClick={() => handleDotClick(index)}
-                  aria-label={`Go to slide ${index + 1}: ${
-                    banner.title
-                  }`}
+                  aria-label={`Go to slide ${index + 1}: ${banner.title}`}
                   aria-current={isActive ? "true" : undefined}
-                  className={`relative h-1.5 cursor-pointer overflow-hidden rounded-full transition-all duration-300 ${
-                    isActive
-                      ? "w-8 bg-pink-100"
-                      : "w-1.5 bg-slate-200 hover:bg-pink-200"
-                  }`}
+                  className={`relative h-1.5 cursor-pointer overflow-hidden rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#74aed2] focus-visible:ring-offset-2 ${indicatorClassName}`}
                 >
                   {isActive && isProgressAnimating && (
                     <span
-                      key={activeIndex}
-                      className="promo-progress-fill absolute inset-y-0 left-0 rounded-full bg-[#ff4f7b]"
+                      key={`progress-${activeIndex}`}
+                      className="promo-progress-fill absolute inset-y-0 left-0 rounded-full bg-[#ef8fa5]"
                     />
                   )}
 
                   {isActive && !isProgressAnimating && (
-                    <span className="absolute inset-0 rounded-full bg-[#ff4f7b]" />
+                    <span className="absolute inset-0 rounded-full bg-[#ef8fa5]" />
                   )}
                 </button>
               );
@@ -310,8 +329,7 @@ export default function PromoGrid({ banners }: PromoGridProps) {
 
       <style jsx>{`
         .promo-progress-fill {
-          animation: promo-progress ${AUTOPLAY_INTERVAL_MS}ms
-            linear forwards;
+          animation: promo-progress ${AUTOPLAY_INTERVAL_MS}ms linear forwards;
         }
 
         @keyframes promo-progress {
@@ -323,7 +341,38 @@ export default function PromoGrid({ banners }: PromoGridProps) {
             width: 100%;
           }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+          .promo-progress-fill {
+            width: 100%;
+            animation: none;
+          }
+        }
       `}</style>
     </section>
+  );
+}
+
+function CarouselButton({
+  direction,
+  onClick,
+}: CarouselButtonProps) {
+  const isPrevious = direction === "previous";
+
+  const Icon = isPrevious ? ChevronLeft : ChevronRight;
+
+  const positionClassName = isPrevious ? "left-4" : "right-4";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={
+        isPrevious ? "Previous promotion" : "Next promotion"
+      }
+      className={`absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-white/30 text-[#315d7b] opacity-0 shadow-[0_12px_30px_-10px_rgba(15,23,42,0.25)] backdrop-blur-xl transition-all duration-200 hover:scale-105 hover:bg-white/60 hover:text-[#e97893] active:scale-95 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef8fa5] focus-visible:ring-offset-2 group-hover/carousel:opacity-100 lg:flex ${positionClassName}`}
+    >
+      <Icon className="h-5 w-5" strokeWidth={2} />
+    </button>
   );
 }
