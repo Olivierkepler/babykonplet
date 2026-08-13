@@ -1,87 +1,26 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  BrushCleaning,
-  Home,
-  Shirt,
-  ShoppingBag,
-  Sparkles,
-  SprayCan,
-  Store,
-  UserRound,
-  UsersRound,
-  Utensils,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import PromoGrid from "../components/home/promo-grid";
+import CollapsibleSidebar from "../components/layout/collapsible-sidebar";
+import AdSidebar from "../components/layout/ad-sidebar";
 import { prisma } from "../lib/prisma";
+import { getActivePromoBanners, getActiveAdSlots } from "../lib/content";
 
-const categories = [
-  {
-    name: "Discover DJADOR",
-    href: "/products?section=discover",
-    icon: Store,
-  },
-  {
-    name: "Women",
-    href: "/products?category=women",
-    icon: UserRound,
-  },
-  {
-    name: "Men",
-    href: "/products?category=men",
-    icon: UsersRound,
-  },
-  {
-    name: "Beauty",
-    href: "/products?category=beauty",
-    icon: Sparkles,
-  },
-  {
-    name: "Hair Care",
-    href: "/products?category=hair-care",
-    icon: SprayCan,
-  },
-  {
-    name: "Shoes",
-    href: "/products?category=shoes",
-    icon: Shirt,
-  },
-  {
-    name: "Bags",
-    href: "/products?category=bags",
-    icon: ShoppingBag,
-  },
-  {
-    name: "Food & Grocery",
-    href: "/products?category=food-grocery",
-    icon: ShoppingBag,
-  },
-  {
-    name: "Home Essentials",
-    href: "/products?category=home-essentials",
-    icon: Home,
-  },
-  {
-    name: "Kitchen",
-    href: "/products?category=kitchen",
-    icon: Utensils,
-  },
-  {
-    name: "Cleaning",
-    href: "/products?category=cleaning",
-    icon: BrushCleaning,
-  },
-  {
-    name: "Wigs",
-    href: "/products?category=wigs",
-    icon: UsersRound,
-  },
-  {
-    name: "Personal Care",
-    href: "/products?category=personal-care",
-    icon: Sparkles,
-  },
-];
+const sidebarCategories = [
+  { name: "Discover DJADOR", href: "/products?section=discover", icon: "Store" },
+  { name: "Women", href: "/products?category=women", icon: "UserRound" },
+  { name: "Men", href: "/products?category=men", icon: "UsersRound" },
+  { name: "Beauty", href: "/products?category=beauty", icon: "Sparkles" },
+  { name: "Hair Care", href: "/products?category=hair-care", icon: "SprayCan" },
+  { name: "Shoes", href: "/products?category=shoes", icon: "Shirt" },
+  { name: "Bags", href: "/products?category=bags", icon: "ShoppingBag" },
+  { name: "Food & Grocery", href: "/products?category=food-grocery", icon: "ShoppingBag" },
+  { name: "Home Essentials", href: "/products?category=home-essentials", icon: "Home" },
+  { name: "Kitchen", href: "/products?category=kitchen", icon: "Utensils" },
+  { name: "Cleaning", href: "/products?category=cleaning", icon: "BrushCleaning" },
+  { name: "Wigs", href: "/products?category=wigs", icon: "UsersRound" },
+  { name: "Personal Care", href: "/products?category=personal-care", icon: "Sparkles" },
+] as const;
 
 const sections = [
   {
@@ -379,78 +318,84 @@ function ProductGrid({
 }
 
 export default async function HomePage() {
-  const previews = await getPreviewImages();
-
-  const latestProducts = await prisma.product.findMany({
-    where: {
-      isActive: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 24,
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      price: true,
-      imageUrl: true,
-    },
-  });
+  const [previews, banners, ads, latestProducts] = await Promise.all([
+    getPreviewImages(),
+    getActivePromoBanners(),
+    getActiveAdSlots(),
+    prisma.product.findMany({
+      where: {
+        isActive: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 24,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        price: true,
+        imageUrl: true,
+      },
+    }),
+  ]);
 
   const firstFourProducts = latestProducts.slice(0, 4);
   const secondFourProducts = latestProducts.slice(4, 8);
   const remainingProducts = latestProducts.slice(8);
 
   return (
-    <main className="bg-slate-50">
-      <section className="mx-auto max-w-7xl px-4 py-4">
-        <nav
-          aria-label="Product categories"
-          className="flex gap-4 overflow-x-auto rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
-        >
-          {categories.map((item) => {
-            const Icon = item.icon;
+    <main className="bg-[#ffffff] ">
+      <div className="mx-auto flex max-w-full sm:px-4">
+        <CollapsibleSidebar items={sidebarCategories as any} title="Shop by category" />
 
-            return (
+        <section className="min-w-0 flex-1 px-4 py-4">
+          <nav
+            aria-label="Product categories"
+            className="flex gap-4 overflow-x-auto rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm lg:hidden"
+          >
+            {sidebarCategories.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
                 className="inline-flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-100"
               >
-                <Icon className="h-4 w-4 text-slate-500" />
                 {item.name}
               </Link>
-            );
-          })}
-        </nav>
+            ))}
+          </nav>
 
-        <PromoGrid />
+          <PromoGrid banners={banners} />
 
-        <HomeSection
-          section={sections[0]}
-          previews={previews}
-        />
+          <HomeSection
+            section={sections[0]}
+            previews={previews}
+          />
 
-        <ProductGrid products={firstFourProducts} />
+          <ProductGrid products={firstFourProducts} />
 
-        <HomeSection
-          section={sections[1]}
-          previews={previews}
-        />
+          <HomeSection
+            section={sections[1]}
+            previews={previews}
+          />
 
-        <ProductGrid products={secondFourProducts} />
+          <ProductGrid products={secondFourProducts} />
 
-        <HomeSection
-          section={sections[2]}
-          previews={previews}
-        />
+          <HomeSection
+            section={sections[2]}
+            previews={previews}
+          />
 
-        <ProductGrid
-          products={remainingProducts}
-          title="Recommended For You"
-        />
-      </section>
+          <ProductGrid
+            products={remainingProducts}
+            title="Recommended For You"
+          />
+        </section>
+
+        <div className="px-4 py-4">
+          <AdSidebar ads={ads} /> 
+        </div>
+      </div>
     </main>
   );
 }

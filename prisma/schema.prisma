@@ -333,3 +333,32 @@ model VerificationToken {
   @@unique([identifier, token])
   @@index([expires])
 }
+model PromoBanner {
+  id        String   @id @default(cuid())
+  title     String
+  subtitle  String
+  imageUrl  String
+  href      String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([order])
+}
+
+model AdSlot {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  href      String
+  alt       String
+  label     String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([order])
+}
