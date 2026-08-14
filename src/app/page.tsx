@@ -43,7 +43,7 @@ const sections: Section[] = [
     title: "Best Value Deals on Fashion",
     background: "image",
     // color: "#ffffff",
-    src: "/images/fashion/bluebg.png",
+    src: "/images/fashion/bg1.png",
     // Arrow shows Women, Men, Shoes and Bags only
     href: "/products?section=fashion",
 

@@ -41,7 +41,7 @@ export default function AdSidebar({
             href={ad.href}
             className="group relative block overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_10px_30px_-15px_rgba(10,37,64,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_40px_-15px_rgba(10,37,64,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
           >
-            <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
+            <div className="relative aspect-[3/4] w-full overflow-hidden ">
               <Image
                 src={ad.imageUrl}
                 alt={ad.alt}
@@ -50,7 +50,7 @@ export default function AdSidebar({
                 sizes="256px"
               />
 
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a2540]/40 via-transparent to-transparent" />
+              {/* <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a2540]/40 via-transparent to-transparent" /> */}
 
               <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-500 backdrop-blur">
                 Ad
