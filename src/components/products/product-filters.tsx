@@ -212,7 +212,7 @@ export default function ProductFilters({
   }
 
   return (
-    <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <aside className=" border border-slate-200 bg-white p-5 shadow-sm">
       {/* FILTER HEADER */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">

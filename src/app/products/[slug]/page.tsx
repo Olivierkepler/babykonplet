@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, ShoppingBag } from "lucide-react";
+import { ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 
 import ProductPurchaseSection from "../../../components/products/product-purchase-section";
 import ReviewSection from "../../../components/reviews/review-section";
@@ -140,22 +140,28 @@ export default async function ProductDetail({
 
   if (!product) {
     return (
-      <main className="min-h-[70vh] bg-slate-50">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-          <div className="border border-slate-200 bg-white px-6 py-20 text-center shadow-sm">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-950">
-              Product Not Found
+      <main className="flex min-h-[70vh] items-center bg-[#FAF7F2]">
+        <div className="mx-auto max-w-full  py-20 ">
+          <div className="mx-auto max-w-full rounded-[2rem] border border-[#E7EEF3] bg-white px-6 py-16 text-center shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)]">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#EAF4F8] text-[#63A0C7]">
+              <ShoppingBag className="h-7 w-7" />
+            </div>
+
+            <h1 className="mt-6 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+              We couldn&apos;t find this product
             </h1>
 
-            <p className="mt-4 text-slate-600">
-              The product you are looking for is unavailable.
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              It may have sold out permanently or the link may be
+              outdated. Take a look at what&apos;s currently in stock
+              instead.
             </p>
 
             <Link
               href="/products"
-              className="mt-8 inline-flex rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-[#63A0C7] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#4F8CB5]"
             >
-              Browse Products
+              Browse All Products
             </Link>
           </div>
         </div>
@@ -188,81 +194,96 @@ export default async function ProductDetail({
         ];
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-[#FAF7F2]">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-12">
-        {/* BREADCRUMB */}
+        {/* BREADCRUMB CARD */}
         <nav
           aria-label="Breadcrumb"
-          className="mb-6 flex flex-wrap items-center gap-2 text-sm text-slate-500"
+          className="mb-6 flex flex-wrap items-center gap-2 rounded-2xl border border-[#E7EEF3] bg-white px-5 py-3.5 text-sm text-slate-500 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.15)]"
         >
           <Link
             href="/"
-            className="font-medium transition hover:text-slate-950"
+            className="font-medium transition-colors hover:text-[#63A0C7]"
           >
             Home
           </Link>
 
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight className="h-4 w-4 text-slate-300" aria-hidden="true" />
+
+          <Link
+            href="/products"
+            className="font-medium transition-colors hover:text-[#63A0C7]"
+          >
+            Products
+          </Link>
 
           {product.category ? (
             <>
+              <ChevronRight
+                className="h-4 w-4 text-slate-300"
+                aria-hidden="true"
+              />
+
               <Link
                 href={`/products?category=${encodeURIComponent(
                   product.category
                 )}`}
-                className="font-medium transition hover:text-slate-950"
+                className="font-medium transition-colors hover:text-[#63A0C7]"
               >
                 {product.category}
               </Link>
-
-              <ChevronRight className="h-4 w-4" />
             </>
           ) : null}
 
-          {product.brand ? (
-            <>
-              <span className="font-medium">
-                {product.brand}
-              </span>
+          <ChevronRight className="h-4 w-4 text-slate-300" aria-hidden="true" />
 
-              <ChevronRight className="h-4 w-4" />
-            </>
-          ) : null}
-
-          <span className="font-semibold text-slate-900">
+          <span
+            aria-current="page"
+            className="truncate font-semibold text-slate-950"
+          >
             {product.name}
           </span>
         </nav>
 
         {/* PRODUCT GALLERY + INFO + VARIANTS */}
-        <ProductPurchaseSection
-          productId={product.id}
-          name={product.name}
-          price={product.price}
-          description={product.description || undefined}
-          brand={product.brand || undefined}
-          category={product.category || undefined}
-          stock={product.stock}
-          averageRating={averageRating}
-          reviewCount={reviewCount}
-          galleryImages={galleryImages}
-          variants={product.variants ?? []}
-        />
+        <div className="rounded-[2rem] border border-[#E7EEF3] bg-white p-4 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)] sm:p-6 lg:p-8">
+          <ProductPurchaseSection
+            productId={product.id}
+            name={product.name}
+            price={product.price}
+            description={product.description || undefined}
+            brand={product.brand || undefined}
+            category={product.category || undefined}
+            stock={product.stock}
+            averageRating={averageRating}
+            reviewCount={reviewCount}
+            galleryImages={galleryImages}
+            variants={product.variants ?? []}
+          />
+        </div>
 
         {/* REVIEWS */}
-        <ReviewSection productId={product.id} />
+        <div className="mt-8 rounded-[2rem] border border-[#E7EEF3] bg-white p-4 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)] sm:p-6 lg:p-8">
+          <ReviewSection productId={product.id} />
+        </div>
 
         {/* RELATED PRODUCTS */}
         {relatedProducts.length > 0 ? (
-          <section className="mt-14 border-t border-slate-200 pt-10">
+          <section className="mt-14">
             <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
-                  More to discover
-                </p>
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#EAF4F8] px-3 py-1.5">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#63A0C7] text-white">
+                    <Sparkles className="h-3 w-3" />
+                  </div>
 
-                <h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">
-                  Related Products
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#4F8CB5]">
+                    More to discover
+                  </p>
+                </div>
+
+                <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+                  You may also like
                 </h2>
               </div>
 
@@ -270,7 +291,7 @@ export default async function ProductDetail({
                 href={`/products?category=${encodeURIComponent(
                   product.category || ""
                 )}`}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#4F8CB5] transition hover:text-[#63A0C7]"
               >
                 View all
                 <ChevronRight className="h-4 w-4" />
@@ -282,9 +303,9 @@ export default async function ProductDetail({
                 <Link
                   key={relatedProduct.id}
                   href={`/products/${relatedProduct.slug}`}
-                  className="group overflow-hidden rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="group overflow-hidden rounded-2xl border border-[#E7EEF3] bg-white p-3 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.15)] transition duration-300 hover:-translate-y-1 hover:border-[#D9EDF5] hover:shadow-[0_20px_40px_-24px_rgba(15,23,42,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
                 >
-                  <div className="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-slate-50 p-4">
+                  <div className="flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-[#FAF7F2] p-4">
                     {relatedProduct.imageUrl ? (
                       <img
                         src={relatedProduct.imageUrl}
@@ -292,10 +313,10 @@ export default async function ProductDetail({
                         className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="flex flex-col items-center text-center text-slate-400">
+                      <div className="flex flex-col items-center text-center text-[#A8CFDD]">
                         <ShoppingBag className="h-8 w-8" />
 
-                        <span className="mt-2 text-sm font-medium">
+                        <span className="mt-2 text-sm font-medium text-slate-500">
                           {relatedProduct.name}
                         </span>
                       </div>
@@ -303,7 +324,7 @@ export default async function ProductDetail({
                   </div>
 
                   <div className="p-2 pt-4">
-                    <h3 className="line-clamp-2 text-sm font-bold leading-6 text-slate-900">
+                    <h3 className="line-clamp-2 min-h-[40px] text-sm font-semibold leading-5 text-slate-900 transition group-hover:text-[#4F8CB5]">
                       {relatedProduct.name}
                     </h3>
 

@@ -46,7 +46,7 @@ type CollapsibleSidebarProps = {
 export default function CollapsibleSidebar({
   items,
   title = "Categories",
-  storageKey = "djador-sidebar-collapsed",
+  storageKey = "baby-konplet-sidebar-collapsed",
 }: CollapsibleSidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -68,13 +68,13 @@ export default function CollapsibleSidebar({
   return (
     <aside
       aria-label={title}
-      className={`sticky top-[76px] hidden h-[calc(100vh-76px)] shrink-0 flex-col border-r border-slate-200 bg-white transition-[width] duration-300 ease-out lg:flex ${
+      className={`sticky top-[76px] hidden h-[calc(100vh-76px)] shrink-0 flex-col border-r border-[#E7EEF3] bg-white transition-[width] duration-300 ease-out lg:flex ${
         collapsed ? "w-[72px]" : "w-64"
       } ${mounted ? "" : "invisible"}`}
     >
       <div className="flex h-14 items-center justify-between px-3">
         {!collapsed && (
-          <span className="truncate text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+          <span className="truncate text-xs font-black uppercase tracking-[0.14em] text-[#4F8CB5]">
             {title}
           </span>
         )}
@@ -83,7 +83,7 @@ export default function CollapsibleSidebar({
           type="button"
           onClick={toggle}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="ml-auto flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+          className="ml-auto flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-500 transition hover:bg-[#EAF4F8] hover:text-[#4F8CB5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
         >
           {collapsed ? (
             <ChevronsRight className="h-4 w-4" />
@@ -93,7 +93,7 @@ export default function CollapsibleSidebar({
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2 pb-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-2 pb-4">
         {items.map((item) => {
           const Icon = ICONS[item.icon] ?? Store;
 
@@ -102,11 +102,19 @@ export default function CollapsibleSidebar({
               key={item.name}
               href={item.href}
               title={collapsed ? item.name : undefined}
-              className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 ${
+              className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition  hover:text-[#4F8CB5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2 ${
                 collapsed ? "justify-center" : ""
               }`}
             >
-              <Icon className="h-[18px] w-[18px] shrink-0 text-slate-500 transition group-hover:text-slate-900" />
+              <span
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${
+                  collapsed
+                    ? ""
+                    : " group-hover:scale-105"
+                }`}
+              >
+                <Icon className="h-[18px] w-[18px] shrink-0 text-[#63A0C7] transition group-hover:text-[#4F8CB5]" />
+              </span>
 
               {!collapsed && <span className="truncate">{item.name}</span>}
             </Link>

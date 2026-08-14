@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   ChevronRight,
   SlidersHorizontal,
+  ShoppingBag,
 } from "lucide-react";
 
 import ProductFilters from "../../components/products/product-filters";
@@ -32,10 +33,7 @@ type ProductClassificationInput = {
  * The saved subCategory is always preferred when it matches one
  * of the official subcategories.
  */
-const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
-  string,
-  string[]
-> = {
+const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<string, string[]> = {
   // Women
   dresses: [
     "dress",
@@ -51,49 +49,19 @@ const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
     "evening gown",
   ],
 
-  skirts: [
-    "skirt",
-    "skirts",
-    "skrit",
-    "skrits",
-  ],
+  skirts: ["skirt", "skirts", "skrit", "skrits"],
 
-  tops: [
-    "top",
-    "tops",
-    "blouse",
-    "blouses",
-    "crop top",
-  ],
+  tops: ["top", "tops", "blouse", "blouses", "crop top"],
 
-  pants: [
-    "pant",
-    "pants",
-    "trouser",
-    "trousers",
-  ],
+  pants: ["pant", "pants", "trouser", "trousers"],
 
-  jeans: [
-    "jean",
-    "jeans",
-    "denim jeans",
-  ],
+  jeans: ["jean", "jeans", "denim jeans"],
 
-  bras: [
-    "bra",
-    "bras",
-  ],
+  bras: ["bra", "bras"],
 
-  lingerie: [
-    "lingerie",
-  ],
+  lingerie: ["lingerie"],
 
-  jackets: [
-    "jacket",
-    "jackets",
-    "coat",
-    "coats",
-  ],
+  jackets: ["jacket", "jackets", "coat", "coats"],
 
   "ethnic-wear": [
     "ethnic wear",
@@ -106,11 +74,7 @@ const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
   ],
 
   // Men
-  shirts: [
-    "shirt",
-    "shirts",
-    "button down",
-  ],
+  shirts: ["shirt", "shirts", "button down"],
 
   "t-shirts": [
     "t-shirt",
@@ -121,11 +85,7 @@ const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
     "tee",
   ],
 
-  suits: [
-    "suit",
-    "suits",
-    "blazer",
-  ],
+  suits: ["suit", "suits", "blazer"],
 
   // Beauty
   makeup: [
@@ -146,78 +106,34 @@ const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
     "face cream",
   ],
 
-  fragrance: [
-    "fragrance",
-    "perfume",
-    "cologne",
-  ],
+  fragrance: ["fragrance", "perfume", "cologne"],
 
-  "nail-care": [
-    "nail care",
-    "nail polish",
-    "manicure",
-  ],
+  "nail-care": ["nail care", "nail polish", "manicure"],
 
   // Hair Care
-  shampoo: [
-    "shampoo",
-  ],
+  shampoo: ["shampoo"],
 
-  conditioner: [
-    "conditioner",
-  ],
+  conditioner: ["conditioner"],
 
-  "hair-oil": [
-    "hair oil",
-  ],
+  "hair-oil": ["hair oil"],
 
-  "hair-styling": [
-    "hair styling",
-    "pomade",
-    "hair gel",
-    "styling gel",
-  ],
+  "hair-styling": ["hair styling", "pomade", "hair gel", "styling gel"],
 
-  "hair-treatment": [
-    "hair treatment",
-    "hair mask",
-    "hair repair",
-  ],
+  "hair-treatment": ["hair treatment", "hair mask", "hair repair"],
 
   // Shoes
-  sneakers: [
-    "sneaker",
-    "sneakers",
-  ],
+  sneakers: ["sneaker", "sneakers"],
 
-  "running-shoes": [
-    "running shoe",
-    "running shoes",
-  ],
+  "running-shoes": ["running shoe", "running shoes"],
 
-  sandals: [
-    "sandal",
-    "sandals",
-  ],
+  sandals: ["sandal", "sandals"],
 
-  heels: [
-    "heel",
-    "heels",
-    "high heel",
-    "high heels",
-  ],
+  heels: ["heel", "heels", "high heel", "high heels"],
 
-  boots: [
-    "boot",
-    "boots",
-  ],
+  boots: ["boot", "boots"],
 
   // Bags
-  handbags: [
-    "handbag",
-    "handbags",
-    "purse",
-  ],
+  handbags: ["handbag", "handbags", "purse"],
 
   "shoulder-bags": [
     "shoulder bag",
@@ -226,123 +142,45 @@ const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
     "crossbody",
   ],
 
-  backpacks: [
-    "backpack",
-    "backpacks",
-  ],
+  backpacks: ["backpack", "backpacks"],
 
-  "travel-bags": [
-    "travel bag",
-    "travel bags",
-    "duffel",
-    "luggage",
-  ],
+  "travel-bags": ["travel bag", "travel bags", "duffel", "luggage"],
 
-  wallets: [
-    "wallet",
-    "wallets",
-  ],
+  wallets: ["wallet", "wallets"],
 
   // Food & Grocery
-  snacks: [
-    "snack",
-    "snacks",
-    "chips",
-  ],
+  snacks: ["snack", "snacks", "chips"],
 
-  cookies: [
-    "cookie",
-    "cookies",
-    "biscuit",
-    "biscuits",
-  ],
+  cookies: ["cookie", "cookies", "biscuit", "biscuits"],
 
-  drinks: [
-    "drink",
-    "drinks",
-    "beverage",
-    "beverages",
-    "juice",
-    "soda",
-  ],
+  drinks: ["drink", "drinks", "beverage", "beverages", "juice", "soda"],
 
-  "rice-and-grains": [
-    "rice",
-    "grain",
-    "grains",
-  ],
+  "rice-and-grains": ["rice", "grain", "grains"],
 
-  lentils: [
-    "lentil",
-    "lentils",
-    "dal",
-  ],
+  lentils: ["lentil", "lentils", "dal"],
 
   // Home Essentials
-  "home-decor": [
-    "home decor",
-    "decor",
-    "decoration",
-  ],
+  "home-decor": ["home decor", "decor", "decoration"],
 
-  storage: [
-    "storage",
-    "organizer",
-    "organiser",
-  ],
+  storage: ["storage", "organizer", "organiser"],
 
-  bathroom: [
-    "bathroom",
-    "bath",
-  ],
+  bathroom: ["bathroom", "bath"],
 
-  bedroom: [
-    "bedroom",
-    "bed sheet",
-    "bedsheet",
-    "pillow",
-  ],
+  bedroom: ["bedroom", "bed sheet", "bedsheet", "pillow"],
 
   // Kitchen
-  cookware: [
-    "cookware",
-    "pan",
-    "pot",
-    "frying pan",
-  ],
+  cookware: ["cookware", "pan", "pot", "frying pan"],
 
-  bakeware: [
-    "bakeware",
-    "baking tray",
-    "cake pan",
-  ],
+  bakeware: ["bakeware", "baking tray", "cake pan"],
 
-  "kitchen-tools": [
-    "kitchen tool",
-    "kitchen tools",
-    "utensil",
-    "utensils",
-  ],
+  "kitchen-tools": ["kitchen tool", "kitchen tools", "utensil", "utensils"],
 
-  dining: [
-    "dining",
-    "plate",
-    "bowl",
-    "cutlery",
-  ],
+  dining: ["dining", "plate", "bowl", "cutlery"],
 
-  "food-storage": [
-    "food storage",
-    "food container",
-    "lunch box",
-  ],
+  "food-storage": ["food storage", "food container", "lunch box"],
 
   // Cleaning
-  laundry: [
-    "laundry",
-    "detergent",
-    "fabric softener",
-  ],
+  laundry: ["laundry", "detergent", "fabric softener"],
 
   "surface-cleaners": [
     "surface cleaner",
@@ -350,11 +188,7 @@ const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
     "floor cleaner",
   ],
 
-  dishwashing: [
-    "dishwashing",
-    "dish soap",
-    "dishwasher",
-  ],
+  dishwashing: ["dishwashing", "dish soap", "dishwasher"],
 
   "cleaning-tools": [
     "cleaning tool",
@@ -365,43 +199,20 @@ const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
   ],
 
   // Wigs
-  "human-hair-wigs": [
-    "human hair wig",
-    "human hair wigs",
-  ],
+  "human-hair-wigs": ["human hair wig", "human hair wigs"],
 
-  "synthetic-wigs": [
-    "synthetic wig",
-    "synthetic wigs",
-  ],
+  "synthetic-wigs": ["synthetic wig", "synthetic wigs"],
 
-  "lace-front-wigs": [
-    "lace front wig",
-    "lace front wigs",
-  ],
+  "lace-front-wigs": ["lace front wig", "lace front wigs"],
 
-  "short-wigs": [
-    "short wig",
-    "short wigs",
-  ],
+  "short-wigs": ["short wig", "short wigs"],
 
-  "long-wigs": [
-    "long wig",
-    "long wigs",
-  ],
+  "long-wigs": ["long wig", "long wigs"],
 
   // Personal Care
-  "body-care": [
-    "body care",
-    "body wash",
-    "body lotion",
-  ],
+  "body-care": ["body care", "body wash", "body lotion"],
 
-  deodorant: [
-    "deodorant",
-    "deodorants",
-    "body spray",
-  ],
+  deodorant: ["deodorant", "deodorants", "body spray"],
 
   "oral-care": [
     "oral care",
@@ -410,11 +221,7 @@ const PRODUCT_NAME_SUBCATEGORY_KEYWORDS: Record<
     "mouthwash",
   ],
 
-  "feminine-care": [
-    "feminine care",
-    "sanitary pad",
-    "sanitary pads",
-  ],
+  "feminine-care": ["feminine care", "sanitary pad", "sanitary pads"],
 
   "mens-grooming": [
     "mens grooming",
@@ -437,15 +244,13 @@ function inferSubcategoryFromProductName(
   productName: string,
   selectedCategory: string,
 ) {
-  const categoryConfig =
-    getStorefrontCategory(selectedCategory);
+  const categoryConfig = getStorefrontCategory(selectedCategory);
 
   if (!categoryConfig) {
     return null;
   }
 
-  const normalizedProductName =
-    normalizeProductName(productName);
+  const normalizedProductName = normalizeProductName(productName);
 
   if (!normalizedProductName) {
     return null;
@@ -453,23 +258,17 @@ function inferSubcategoryFromProductName(
 
   for (const subcategory of categoryConfig.subcategories) {
     const keywords =
-      PRODUCT_NAME_SUBCATEGORY_KEYWORDS[
-        subcategory.value
-      ] ?? [];
+      PRODUCT_NAME_SUBCATEGORY_KEYWORDS[subcategory.value] ?? [];
 
     const matchesKeyword = keywords.some((keyword) => {
-      const normalizedKeyword =
-        normalizeProductName(keyword);
+      const normalizedKeyword = normalizeProductName(keyword);
 
       if (!normalizedKeyword) {
         return false;
       }
 
-      const productWords =
-        ` ${normalizedProductName} `;
-
-      const keywordWords =
-        ` ${normalizedKeyword} `;
+      const productWords = ` ${normalizedProductName} `;
+      const keywordWords = ` ${normalizedKeyword} `;
 
       return productWords.includes(keywordWords);
     });
@@ -493,35 +292,25 @@ function getEffectiveProductSubcategory(
   product: ProductClassificationInput,
   selectedCategory: string,
 ) {
-  const categoryConfig =
-    getStorefrontCategory(selectedCategory);
+  const categoryConfig = getStorefrontCategory(selectedCategory);
 
   if (!categoryConfig) {
     return null;
   }
 
-  const savedSubcategory =
-    resolveStorefrontSubcategory(
-      product.subCategory,
-    );
+  const savedSubcategory = resolveStorefrontSubcategory(
+    product.subCategory,
+  );
 
-  const savedSubcategoryIsOfficial =
-    categoryConfig.subcategories.some(
-      (subcategory) =>
-        subcategory.value === savedSubcategory,
-    );
+  const savedSubcategoryIsOfficial = categoryConfig.subcategories.some(
+    (subcategory) => subcategory.value === savedSubcategory,
+  );
 
-  if (
-    savedSubcategory &&
-    savedSubcategoryIsOfficial
-  ) {
+  if (savedSubcategory && savedSubcategoryIsOfficial) {
     return savedSubcategory;
   }
 
-  return inferSubcategoryFromProductName(
-    product.name,
-    selectedCategory,
-  );
+  return inferSubcategoryFromProductName(product.name, selectedCategory);
 }
 
 function buildCategoryOptions(
@@ -532,9 +321,7 @@ function buildCategoryOptions(
   return STOREFRONT_CATEGORIES.map((category) => {
     const count = products.filter(
       (product) =>
-        resolveStorefrontCategory(
-          product.category,
-        ) === category.value,
+        resolveStorefrontCategory(product.category) === category.value,
     ).length;
 
     return {
@@ -552,36 +339,22 @@ function buildBrandOptions(
   }>,
   selectedCategory: string,
 ): FilterOption[] {
-  const brandMap = new Map<
-    string,
-    FilterOption
-  >();
+  const brandMap = new Map<string, FilterOption>();
 
   for (const product of products) {
-    const productCategory =
-      resolveStorefrontCategory(
-        product.category,
-      );
+    const productCategory = resolveStorefrontCategory(product.category);
 
-    if (
-      selectedCategory &&
-      productCategory !== selectedCategory
-    ) {
+    if (selectedCategory && productCategory !== selectedCategory) {
       continue;
     }
 
-    const normalizedBrand =
-      normalizeStorefrontBrand(
-        product.brand,
-      );
+    const normalizedBrand = normalizeStorefrontBrand(product.brand);
 
     if (!normalizedBrand) {
       continue;
     }
 
-    const existingBrand = brandMap.get(
-      normalizedBrand.value,
-    );
+    const existingBrand = brandMap.get(normalizedBrand.value);
 
     if (existingBrand) {
       existingBrand.count += 1;
@@ -595,9 +368,7 @@ function buildBrandOptions(
     });
   }
 
-  return Array.from(
-    brandMap.values(),
-  ).sort((a, b) =>
+  return Array.from(brandMap.values()).sort((a, b) =>
     a.name.localeCompare(b.name),
   );
 }
@@ -621,75 +392,52 @@ function buildProductTypeOptions(
     return [];
   }
 
-  const categoryConfig =
-    getStorefrontCategory(selectedCategory);
+  const categoryConfig = getStorefrontCategory(selectedCategory);
 
   if (!categoryConfig) {
     return [];
   }
 
-  return categoryConfig.subcategories.map(
-    (subcategory) => {
-      const count = products.filter((product) => {
-        const productCategory =
-          resolveStorefrontCategory(
-            product.category,
-          );
+  return categoryConfig.subcategories.map((subcategory) => {
+    const count = products.filter((product) => {
+      const productCategory = resolveStorefrontCategory(product.category);
 
-        if (
-          productCategory !== selectedCategory
-        ) {
-          return false;
-        }
+      if (productCategory !== selectedCategory) {
+        return false;
+      }
 
-        const effectiveSubcategory =
-          getEffectiveProductSubcategory(
-            product,
-            selectedCategory,
-          );
+      const effectiveSubcategory = getEffectiveProductSubcategory(
+        product,
+        selectedCategory,
+      );
 
-        return (
-          effectiveSubcategory ===
-          subcategory.value
-        );
-      }).length;
+      return effectiveSubcategory === subcategory.value;
+    }).length;
 
-      return {
-        name: subcategory.name,
-        value: subcategory.value,
-        count,
-      };
-    },
-  );
+    return {
+      name: subcategory.name,
+      value: subcategory.value,
+      count,
+    };
+  });
 }
 
-async function getProducts(
-  selectedCategory: string,
-) {
-  const products =
-    await prisma.product.findMany({
-      where: {
-        isActive: true,
-      },
+async function getProducts(selectedCategory: string) {
+  const products = await prisma.product.findMany({
+    where: {
+      isActive: true,
+    },
 
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
-  const categories =
-    buildCategoryOptions(products);
+  const categories = buildCategoryOptions(products);
 
-  const brands = buildBrandOptions(
-    products,
-    selectedCategory,
-  );
+  const brands = buildBrandOptions(products, selectedCategory);
 
-  const productTypes =
-    buildProductTypeOptions(
-      products,
-      selectedCategory,
-    );
+  const productTypes = buildProductTypeOptions(products, selectedCategory);
 
   return {
     products,
@@ -706,10 +454,7 @@ function parsePrice(value?: string) {
 
   const parsedValue = Number(value);
 
-  if (
-    !Number.isFinite(parsedValue) ||
-    parsedValue < 0
-  ) {
+  if (!Number.isFinite(parsedValue) || parsedValue < 0) {
     return undefined;
   }
 
@@ -732,62 +477,35 @@ export default async function ProductsPage({
 }) {
   const params = await searchParams;
 
-  const category =
-    normalizeStorefrontValue(
-      params.category,
-    );
+  const category = normalizeStorefrontValue(params.category);
 
-  const brand =
-    normalizeStorefrontValue(
-      params.brand,
-    );
+  const brand = normalizeStorefrontValue(params.brand);
 
   const productType =
-    resolveStorefrontSubcategory(
-      params.productType,
-    ) || "";
+    resolveStorefrontSubcategory(params.productType) || "";
 
-  const search =
-    params.search?.toLowerCase().trim() || "";
+  const search = params.search?.toLowerCase().trim() || "";
 
-  const inStock =
-    params.inStock === "true";
+  const inStock = params.inStock === "true";
 
-  const minPrice =
-    parsePrice(params.minPrice);
+  const minPrice = parsePrice(params.minPrice);
 
-  const maxPrice =
-    parsePrice(params.maxPrice);
+  const maxPrice = parsePrice(params.maxPrice);
 
-    const sort = params.sort || "newest";
+  const sort = params.sort || "newest";
 
-  const {
-    products,
-    categories,
-    brands,
-    productTypes,
-  } = await getProducts(category);
+  const { products, categories, brands, productTypes } =
+    await getProducts(category);
 
   const filteredProducts = products
-  .filter((product) => {
-      const productCategory =
-        resolveStorefrontCategory(
-          product.category,
-        );
+    .filter((product) => {
+      const productCategory = resolveStorefrontCategory(product.category);
 
-      const productBrand =
-        normalizeStorefrontBrand(
-          product.brand,
-        );
+      const productBrand = normalizeStorefrontBrand(product.brand);
 
       const productTypeValue = category
-        ? getEffectiveProductSubcategory(
-            product,
-            category,
-          )
-        : resolveStorefrontSubcategory(
-            product.subCategory,
-          );
+        ? getEffectiveProductSubcategory(product, category)
+        : resolveStorefrontSubcategory(product.subCategory);
 
       const searchableText = [
         product.name,
@@ -800,76 +518,61 @@ export default async function ProductsPage({
         .join(" ")
         .toLowerCase();
 
-      const matchesCategory = category
-        ? productCategory === category
-        : true;
+      const matchesCategory = category ? productCategory === category : true;
 
-      const matchesBrand = brand
-        ? productBrand?.value === brand
-        : true;
+      const matchesBrand = brand ? productBrand?.value === brand : true;
 
-      const matchesProductType =
-        productType
-          ? productTypeValue === productType
-          : true;
+      const matchesProductType = productType
+        ? productTypeValue === productType
+        : true;
 
       const matchesSearch = search
         ? searchableText.includes(search)
         : true;
 
-      const matchesAvailability = inStock
-        ? product.stock > 0
-        : true;
+      const matchesAvailability = inStock ? product.stock > 0 : true;
 
       const matchesMinimumPrice =
-        minPrice !== undefined
-          ? product.price >= minPrice
-          : true;
+        minPrice !== undefined ? product.price >= minPrice : true;
 
       const matchesMaximumPrice =
-        maxPrice !== undefined
-          ? product.price <= maxPrice
-          : true;
+        maxPrice !== undefined ? product.price <= maxPrice : true;
 
+      return (
+        matchesCategory &&
+        matchesBrand &&
+        matchesProductType &&
+        matchesSearch &&
+        matchesAvailability &&
+        matchesMinimumPrice &&
+        matchesMaximumPrice
+      );
+    })
+    .sort((a, b) => {
+      switch (sort) {
+        case "price-low":
+          return a.price - b.price;
+
+        case "price-high":
+          return b.price - a.price;
+
+        case "name":
+          return a.name.localeCompare(b.name);
+
+        case "newest":
+        default:
           return (
-            matchesCategory &&
-            matchesBrand &&
-            matchesProductType &&
-            matchesSearch &&
-            matchesAvailability &&
-            matchesMinimumPrice &&
-            matchesMaximumPrice
+            new Date(b.createdAt).getTime() -
+            new Date(a.createdAt).getTime()
           );
-        },
-      )
-      .sort((a, b) => {
-        switch (sort) {
-          case "price-low":
-            return a.price - b.price;
-    
-          case "price-high":
-            return b.price - a.price;
-    
-          case "name":
-            return a.name.localeCompare(b.name);
-    
-          case "newest":
-          default:
-            return (
-              new Date(b.createdAt).getTime() -
-              new Date(a.createdAt).getTime()
-            );
-        }
-      });
+      }
+    });
 
-  const selectedCategory =
-    getStorefrontCategory(category);
+  const selectedCategory = getStorefrontCategory(category);
 
-  const selectedSubcategory =
-    selectedCategory?.subcategories.find(
-      (subcategory) =>
-        subcategory.value === productType,
-    );
+  const selectedSubcategory = selectedCategory?.subcategories.find(
+    (subcategory) => subcategory.value === productType,
+  );
 
   const pageTitle = selectedSubcategory
     ? `${selectedSubcategory.name} Collection`
@@ -880,113 +583,103 @@ export default async function ProductsPage({
         : "All Products";
 
   return (
-    <main className="min-h-screen bg-white">
-      <div className="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-      <section className="bg-white px-5 py-6 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)] sm:px-7 sm:py-7">
-  {/* Breadcrumb */}
-  <nav
-    aria-label="Breadcrumb"
-    className="flex flex-wrap items-center gap-2 text-sm text-slate-500"
-  >
-    <Link
-      href="/"
-      className="font-medium transition-colors hover:text-[#63A0C7]"
-    >
-      Home
-    </Link>
+    <main className="min-h-screen bg-[#FAF7F2]">
+      <div className="mx-auto max-w-full px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+        {/* HERO / HEADER CARD */}
+        <section className="relative overflow-hidden  border border-[#E7EEF3] bg-white px-6 py-8 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)] sm:px-9 sm:py-10">
+          {/* soft decorative accents, no image needed */}
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#EAF4F8]" />
+          <div className="pointer-events-none absolute -right-4 top-24 h-16 w-16 rounded-full bg-[#FDEDE9]" />
+          <div className="pointer-events-none absolute right-32 -top-6 h-10 w-10 rounded-full bg-[#FFF6DC]" />
 
-    <ChevronRight
-      className="h-4 w-4 text-slate-300"
-      aria-hidden="true"
-    />
+          <div className="relative">
+            {/* Breadcrumb */}
+            <nav
+              aria-label="Breadcrumb"
+              className="flex flex-wrap items-center gap-2 text-sm text-slate-500"
+            >
+              <Link
+                href="/"
+                className="font-medium transition-colors hover:text-[#63A0C7]"
+              >
+                Home
+              </Link>
 
-    <Link
-      href="/products"
-      className="font-medium transition-colors hover:text-[#63A0C7]"
-    >
-      Products
-    </Link>
+              <ChevronRight
+                className="h-4 w-4 text-slate-300"
+                aria-hidden="true"
+              />
 
-    {selectedCategory ? (
-      <>
-        <ChevronRight
-          className="h-4 w-4 text-slate-300"
-          aria-hidden="true"
-        />
+              <Link
+                href="/products"
+                className="font-medium transition-colors hover:text-[#63A0C7]"
+              >
+                Products
+              </Link>
 
-        <Link
-          href={`/products?category=${selectedCategory.value}`}
-          className="font-medium text-slate-700 transition-colors hover:text-[#63A0C7]"
-        >
-          {selectedCategory.name}
-        </Link>
-      </>
-    ) : null}
+              {selectedCategory ? (
+                <>
+                  <ChevronRight
+                    className="h-4 w-4 text-slate-300"
+                    aria-hidden="true"
+                  />
 
-    {selectedSubcategory ? (
-      <>
-        <ChevronRight
-          className="h-4 w-4 text-slate-300"
-          aria-hidden="true"
-        />
+                  <Link
+                    href={`/products?category=${selectedCategory.value}`}
+                    className="font-medium text-slate-700 transition-colors hover:text-[#63A0C7]"
+                  >
+                    {selectedCategory.name}
+                  </Link>
+                </>
+              ) : null}
 
-        <span
-          aria-current="page"
-          className="font-semibold text-slate-950"
-        >
-          {selectedSubcategory.name}
-        </span>
-      </>
-    ) : null}
-  </nav>
+              {selectedSubcategory ? (
+                <>
+                  <ChevronRight
+                    className="h-4 w-4 text-slate-300"
+                    aria-hidden="true"
+                  />
 
-  {/* Header */}
-  <div className="mt-6 flex flex-col gap-6 border-t border-slate-100 pt-6 sm:flex-row sm:items-end sm:justify-between">
-    {/* <div className="max-w-3xl">
-      <div className="inline-flex items-center gap-2 rounded-full bg-[#EAF4F8] px-3 py-1.5">
-        <span className="h-1.5 w-1.5 rounded-full bg-[#63A0C7]" />
+                  <span
+                    aria-current="page"
+                    className="font-semibold text-slate-950"
+                  >
+                    {selectedSubcategory.name}
+                  </span>
+                </>
+              ) : null}
+            </nav>
 
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#4F8CB5]">
-          Baby Konple Store
-        </p>
-      </div>
+            {/* Title row */}
+            <div className="mt-6 flex flex-col gap-6 border-t border-slate-100 pt-6 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-2xl">
+               
 
-      <h1 className="mt-4 text-3xl font-bold tracking-[-0.03em] text-slate-950 sm:text-4xl lg:text-[2.6rem]">
-        {pageTitle}
-      </h1>
+                <h1 className="mt-4 text-3xl font-bold tracking-[-0.03em] text-slate-950 sm:text-4xl">
+                  {pageTitle}
+                </h1>
 
-      <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-        Explore our available products and find the right item for you.
-      </p>
-    </div> */}
+              </div>
 
-   
-<div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-  <h3 className=" font-bold tracking-[-0.03em] text-slate-950 ">
-    {pageTitle}
-  </h3>
+              <div className="inline-flex items-center gap-2 self-start rounded-full border border-[#D9EDF5] bg-[#F2F9FC] px-3 py-1.5">
+                <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-[#A8CFDD] px-1.5 text-xs font-bold text-white">
+                  {filteredProducts.length}
+                </span>
 
-  <div className="inline-flex items-center gap-2 rounded-full border border-[#D9EDF5] bg-[#F2F9FC] px-3 py-1.5">
-    <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-[#A8CFDD] px-1.5 text-xs font-bold text-white">
-      {filteredProducts.length}
-    </span>
-
-    <span className="text-xs font-semibold tracking-wide text-[#4F819F]">
-      {filteredProducts.length === 1 ? "Product" : "Products"}
-    </span>
-  </div>
-</div>
-  </div>
-</section>
+                <span className="text-xs font-semibold tracking-wide text-[#4F819F]">
+                  {filteredProducts.length === 1 ? "Product" : "Products"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* TOOLBAR */}
-        <section className="mt-5 flex flex-col gap-4  bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <section className="mt-5 flex flex-col gap-4  border border-[#E7EEF3] bg-white px-5 py-4 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.15)] sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-slate-900">
               {filteredProducts.length}{" "}
-              {filteredProducts.length === 1
-                ? "product"
-                : "products"}
+              {filteredProducts.length === 1 ? "product" : "products"}
             </p>
 
             <p className="mt-1 text-xs text-slate-500">
@@ -997,7 +690,7 @@ export default async function ProductsPage({
           <div className="flex items-center gap-3">
             <button
               type="button"
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 lg:hidden"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-[#D9EDF5] px-4 py-2.5 text-sm font-semibold text-[#4F819F] transition hover:bg-[#F2F9FC] lg:hidden"
             >
               <SlidersHorizontal className="h-4 w-4" />
               Filters
@@ -1014,34 +707,37 @@ export default async function ProductsPage({
         {/* PRODUCT AREA */}
         <div className="mt-6 grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
           <div className="hidden lg:block">
-            <ProductFilters
-              categories={categories}
-              brands={brands}
-              productTypes={productTypes}
-              selectedCategory={category}
-              selectedBrand={brand}
-              selectedProductType={productType}
-              inStock={inStock}
-              minPrice={params.minPrice || ""}
-              maxPrice={params.maxPrice || ""}
-            />
+         
+              <ProductFilters
+                categories={categories}
+                brands={brands}
+                productTypes={productTypes}
+                selectedCategory={category}
+                selectedBrand={brand}
+                selectedProductType={productType}
+                inStock={inStock}
+                minPrice={params.minPrice || ""}
+                maxPrice={params.maxPrice || ""}
+              />
+          
           </div>
 
           <div className="min-w-0">
             {filteredProducts.length > 0 ? (
-              <ProductGrid
-                products={filteredProducts}
-              />
+              <ProductGrid products={filteredProducts} />
             ) : (
-              <section className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-20 text-center shadow-sm">
-                <h2 className="text-2xl font-bold text-slate-950">
+              <section className="rounded-[2rem] border border-dashed border-[#D9EDF5] bg-white px-6 py-20 text-center shadow-[0_10px_30px_-24px_rgba(15,23,42,0.15)]">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#EAF4F8] text-[#63A0C7]">
+                  <ShoppingBag className="h-7 w-7" />
+                </div>
+
+                <h2 className="mt-6 text-2xl font-bold text-slate-950">
                   No products found
                 </h2>
 
                 <p className="mt-3 text-sm text-slate-600">
-                  We do not currently have active
-                  products matching your selected
-                  filters.
+                  We do not currently have active products matching your
+                  selected filters.
                 </p>
 
                 <Link
@@ -1050,7 +746,7 @@ export default async function ProductsPage({
                       ? `/products?category=${selectedCategory.value}`
                       : "/products"
                   }
-                  className="mt-7 inline-flex rounded-xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+                  className="mt-7 inline-flex rounded-full bg-[#63A0C7] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#4F8CB5]"
                 >
                   Clear This Filter
                 </Link>

@@ -41,16 +41,21 @@ export default function Footer() {
 
   return (
     <footer
-      className="border-t border-slate-100 relative mt-20"
-      style={{
-        backgroundImage: "url(/images/fashion/bluebg.png)",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        opacity: 0.80,
-      }}
+      className=" relative "
+      // style={{
+      //   backgroundImage: "url(/images/background.png)",
+      //   backgroundSize: "cover",
+      //   backgroundRepeat: "no-repeat",
+      //   backgroundPosition: "center",
+      //   opacity: 0.80,
+      // }}
  
     >
+       {/* soft decorative accents, no image needed */}
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#EAF4F8]" />
+          <div className="pointer-events-none absolute -right-4 top-24 h-16 w-16 rounded-full bg-[#FDEDE9]" />
+          <div className="pointer-events-none absolute right-32 -top-6 h-10 w-10 rounded-full bg-[#FFF6DC]" />
+
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Newsletter */}
         <div className="py-10">

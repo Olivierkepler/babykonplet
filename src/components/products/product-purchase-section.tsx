@@ -50,8 +50,7 @@ export default function ProductPurchaseSection({
         galleryImages
           .filter(
             (image): image is string =>
-              typeof image === "string" &&
-              image.trim().length > 0
+              typeof image === "string" && image.trim().length > 0
           )
           .map((image) => image.trim())
       )
@@ -63,9 +62,7 @@ export default function ProductPurchaseSection({
         : ["/images/product-placeholder.png"];
     }
 
-    const normalizedSelectedColor = selectedColor
-      .trim()
-      .toLowerCase();
+    const normalizedSelectedColor = selectedColor.trim().toLowerCase();
 
     const colorImages = variants
       .filter((variant) => {
@@ -80,9 +77,7 @@ export default function ProductPurchaseSection({
       })
       .map((variant) => variant.imageUrl!.trim());
 
-    const uniqueColorImages = Array.from(
-      new Set(colorImages)
-    ).slice(0, 6);
+    const uniqueColorImages = Array.from(new Set(colorImages)).slice(0, 6);
 
     return uniqueColorImages.length > 0
       ? uniqueColorImages
@@ -92,44 +87,38 @@ export default function ProductPurchaseSection({
   }, [galleryImages, selectedColor, variants]);
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.06)] sm:rounded-3xl">
-      <div className="grid items-start lg:grid-cols-[1.05fr_0.95fr]">
-        {/* LEFT: PRODUCT IMAGES */}
-        <div className="min-w-0 border-b border-slate-200 p-3 sm:p-5 lg:border-b-0 lg:border-r lg:p-5">
-          <ProductGallery
-            images={displayedImages}
-            name={
-              selectedColor
-                ? `${name} - ${selectedColor}`
-                : name
-            }
-          />
-        </div>
+    <div className="grid items-start gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
+      {/* LEFT: PRODUCT IMAGES */}
+      <div className="min-w-0 border-b border-[#E7EEF3] pb-6 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
+        <ProductGallery
+          images={displayedImages}
+          name={selectedColor ? `${name} - ${selectedColor}` : name}
+        />
+      </div>
 
-        {/* RIGHT: PRODUCT DETAILS */}
-        <div className="min-w-0 p-4 sm:p-7 lg:p-9">
-          <ProductInfo
-            name={name}
-            price={price}
-            description={description}
-            brand={brand}
-            category={category}
+      {/* RIGHT: PRODUCT DETAILS */}
+      <div className="min-w-0">
+        <ProductInfo
+          name={name}
+          price={price}
+          description={description}
+          brand={brand}
+          category={category}
+          stock={stock}
+          averageRating={averageRating}
+          reviewCount={reviewCount}
+        />
+
+        <div className="mt-7 border-t border-[#E7EEF3] pt-7 sm:mt-8 sm:pt-8">
+          <AddToCartButton
+            productId={productId}
             stock={stock}
-            averageRating={averageRating}
-            reviewCount={reviewCount}
+            variants={variants}
+            selectedColor={selectedColor}
+            onColorChange={setSelectedColor}
           />
-
-          <div className="mt-7 border-t border-slate-200 pt-7 sm:mt-8 sm:pt-8">
-            <AddToCartButton
-              productId={productId}
-              stock={stock}
-              variants={variants}
-              selectedColor={selectedColor}
-              onColorChange={setSelectedColor}
-            />
-          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
