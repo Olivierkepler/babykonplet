@@ -1,7 +1,10 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Lock } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import Image from "next/image";
 import CartItem from "../../components/cart/cart-item";
 import CartSummary from "../../components/cart/cart-summary";
 import EmptyCart from "../../components/cart/empty-cart";
@@ -22,12 +25,18 @@ type CartItemType = {
 };
 
 export default function CartPage() {
+  const { status } = useSession();
   const { refreshCart } = useCart();
   const [items, setItems] = useState<CartItemType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (status !== "authenticated") {
+      setLoading(false);
+      return;
+    }
+
     async function loadCart() {
       try {
         setLoading(true);
@@ -56,7 +65,7 @@ export default function CartPage() {
     }
 
     loadCart();
-  }, []);
+  }, [status]);
 
   function handleQuantityChange(itemId: string, nextQuantity: number) {
     setItems((prev) =>
@@ -86,6 +95,63 @@ export default function CartPage() {
     [items]
   );
 
+  // Logged-out state: full illustrated background + centered login card
+  if (status === "unauthenticated") {
+    return (
+      <main className="relative min-h-screen overflow-hidden">
+        <Image
+          src="/images/background.png"
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+        />
+
+        <div className="relative z-10 mx-auto flex min-h-screen max-w-2xl flex-col items-center px-4 py-14 sm:py-20">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-500/90 text-white shadow-lg backdrop-blur">
+            <ShoppingBag className="h-7 w-7" />
+          </div>
+
+          <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em] text-slate-500">
+            Shopping Cart
+          </p>
+
+          <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            Review your cart
+          </h1>
+
+          <div className="mt-10 w-full max-w-sm rounded-[2rem] bg-white/95 px-8 py-10 text-center shadow-2xl backdrop-blur">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-500 text-white">
+              <Lock className="h-7 w-7" />
+            </div>
+
+            <h2 className="mt-6 text-2xl font-bold text-slate-900">
+              Log in to see your cart
+            </h2>
+
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">
+              Sign in to view saved items, save favorites, and continue your
+              Baby Konplet shopping journey.
+            </p>
+
+            <Link
+              href="/login?callbackUrl=/cart"
+              className="mt-7 inline-flex w-full items-center justify-center rounded-full bg-slate-500 px-6 py-3.5 text-base font-semibold text-white shadow-md transition hover:bg-slate-600"
+            >
+              Log In
+            </Link>
+
+            <div className="mt-6 flex items-center justify-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-rose-300" />
+              <span className="h-2 w-2 rounded-full bg-sky-300" />
+              <span className="h-2 w-2 rounded-full bg-amber-300" />
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-12">
@@ -104,7 +170,7 @@ export default function CartPage() {
                 Review your cart
               </h1>
 
-              {!loading && !error && items.length > 0 ? (
+              {status === "authenticated" && !loading && !error && items.length > 0 ? (
                 <p className="mt-2 text-sm text-slate-600">
                   {totalItems} {totalItems === 1 ? "item" : "items"} in your cart
                 </p>
@@ -113,7 +179,15 @@ export default function CartPage() {
           </div>
         </section>
 
-        {loading ? (
+        {status === "loading" ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="h-2 w-28 animate-pulse rounded-full bg-slate-200" />
+
+            <p className="mt-5 text-sm font-medium text-slate-600">
+              Checking your session...
+            </p>
+          </div>
+        ) : loading ? (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
             <div className="h-2 w-28 animate-pulse rounded-full bg-slate-200" />
 
