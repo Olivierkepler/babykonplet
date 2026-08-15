@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="overflow-x-hidden">
-      <body className="min-h-screen overflow-x-hidden bg-white text-slate-900 antialiased">
+      <body className="min-h-screen overflow-x-clip bg-white text-slate-900 antialiased">
         <Providers>
           <SiteShell>
             <div className="mx-auto w-full max-w-full">{children}</div>

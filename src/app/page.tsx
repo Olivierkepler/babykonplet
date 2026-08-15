@@ -419,10 +419,10 @@ export default async function HomePage() {
 
  return (
     <main className="bg-[#ffffff] min-h-screen">
-      <div className="mx-auto flex-1 max-w-full gap-6 px-0 py-6 sm:px-6 lg:gap-8  lg:flex">
+      <div className="mx-auto flex-1 max-w-full gap-6 py-6 lg:gap-8 lg:flex">
         <CollapsibleSidebar items={sidebarCategories} title="Shop by category" />
 
-        <section className="min-w-0 flex-1 px-4 py-4">
+        <section className="min-w-0 flex-1 px-4 py-4 sm:px-6">
           <nav
             aria-label="Product categories"
             className="flex gap-4 overflow-x-auto rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm lg:hidden"

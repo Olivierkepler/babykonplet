@@ -68,7 +68,7 @@ export default function CollapsibleSidebar({
   return (
     <aside
       aria-label={title}
-      className={`sticky top-[76px] hidden h-[calc(100vh-76px)] shrink-0 flex-col bg-white transition-[width] duration-300 ease-out lg:flex ${
+      className={`sticky top-[76px] z-30 hidden h-[calc(100vh-76px)] shrink-0 self-start overflow-y-auto flex-col bg-white transition-[width] duration-300 ease-out lg:flex ${
         collapsed ? "w-[72px]" : "w-64"
       } ${mounted ? "" : "invisible"}`}
     >
