@@ -1,9 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 
 import ProductPurchaseSection from "../../../components/products/product-purchase-section";
 import ReviewSection from "../../../components/reviews/review-section";
 import { prisma } from "../../../lib/prisma";
+
+export const revalidate = 60;
 
 type ProductImage = {
   id: string;
@@ -32,6 +36,7 @@ type Product = {
   brand?: string | null;
   category?: string | null;
   stock: number;
+  isActive: boolean;
   imageUrl?: string | null;
   image?: string | null;
   images?: ProductImage[];
@@ -95,22 +100,25 @@ async function getRelatedProducts(
   productId: string,
   category?: string | null
 ): Promise<RelatedProduct[]> {
-  if (!category) {
-    return [];
-  }
-
   return prisma.product.findMany({
     where: {
       isActive: true,
 
-      category: {
-        equals: category,
-        mode: "insensitive",
-      },
-
       id: {
         not: productId,
       },
+
+      // When the product has a category, stay within it. Otherwise
+      // fall back to "other active products" so the section still
+      // has something to show instead of silently rendering nothing.
+      ...(category
+        ? {
+            category: {
+              equals: category,
+              mode: "insensitive",
+            },
+          }
+        : {}),
     },
 
     orderBy: {
@@ -129,6 +137,38 @@ async function getRelatedProducts(
   });
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+
+  if (!product || !product.isActive) {
+    return {
+      title: "Product not found",
+    };
+  }
+
+  const image =
+    product.images?.[0]?.url || product.imageUrl || product.image || undefined;
+
+  const description =
+    product.description?.slice(0, 155) ||
+    `${product.name} — shop now at Baby Konple.`;
+
+  return {
+    title: product.name,
+    description,
+    openGraph: {
+      title: product.name,
+      description,
+      images: image ? [{ url: image }] : undefined,
+    },
+  };
+}
+
 export default async function ProductDetail({
   params,
 }: {
@@ -138,35 +178,8 @@ export default async function ProductDetail({
 
   const product = await getProduct(slug);
 
-  if (!product) {
-    return (
-      <main className="flex min-h-[70vh] items-center bg-[#FAF7F2]">
-        <div className="mx-auto max-w-full  py-20 ">
-          <div className="mx-auto max-w-full rounded-[2rem] border border-[#E7EEF3] bg-white px-6 py-16 text-center shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)]">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#EAF4F8] text-[#63A0C7]">
-              <ShoppingBag className="h-7 w-7" />
-            </div>
-
-            <h1 className="mt-6 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
-              We couldn&apos;t find this product
-            </h1>
-
-            <p className="mt-3 text-sm leading-6 text-slate-600">
-              It may have sold out permanently or the link may be
-              outdated. Take a look at what&apos;s currently in stock
-              instead.
-            </p>
-
-            <Link
-              href="/products"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-[#63A0C7] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#4F8CB5]"
-            >
-              Browse All Products
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
+  if (!product || !product.isActive) {
+    notFound();
   }
 
   const reviewCount = product.reviews?.length ?? 0;
@@ -194,8 +207,8 @@ export default async function ProductDetail({
         ];
 
   return (
-    <main className="min-h-screen bg-[#FAF7F2]">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-12">
+    <main className="min-h-screen ">
+      <div className="mx-auto max-w-full px-4 py-8 sm:px-6 lg:py-12">
         {/* BREADCRUMB CARD */}
         <nav
           aria-label="Breadcrumb"
@@ -246,7 +259,7 @@ export default async function ProductDetail({
         </nav>
 
         {/* PRODUCT GALLERY + INFO + VARIANTS */}
-        <div className="rounded-[2rem] border border-[#E7EEF3] bg-white p-4 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)] sm:p-6 lg:p-8">
+        <div className=" border border-[#E7EEF3] bg-white p-4 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.18)] sm:p-6 lg:p-8">
           <ProductPurchaseSection
             productId={product.id}
             name={product.name}
@@ -288,9 +301,11 @@ export default async function ProductDetail({
               </div>
 
               <Link
-                href={`/products?category=${encodeURIComponent(
-                  product.category || ""
-                )}`}
+                href={
+                  product.category
+                    ? `/products?category=${encodeURIComponent(product.category)}`
+                    : "/products"
+                }
                 className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#4F8CB5] transition hover:text-[#63A0C7]"
               >
                 View all
