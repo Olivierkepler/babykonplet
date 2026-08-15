@@ -56,6 +56,9 @@ export default function Footer() {
           <div className="pointer-events-none absolute -right-4 top-24 h-16 w-16 rounded-full bg-[#FDEDE9]" />
           <div className="pointer-events-none absolute right-32 -top-6 h-10 w-10 rounded-full bg-[#FFF6DC]" />
 
+
+
+
       <div className="mx-auto max-w-full px-6 lg:px-8">
         {/* Newsletter */}
         <div className="py-10">

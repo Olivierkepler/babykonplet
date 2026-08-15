@@ -744,7 +744,7 @@ export default async function ProductsPage({
                   href={
                     selectedCategory
                       ? `/products?category=${selectedCategory.value}`
-                      : "/products"
+                      : "/app/products"
                   }
                   className="mt-7 inline-flex rounded-full bg-[#63A0C7] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#4F8CB5]"
                 >

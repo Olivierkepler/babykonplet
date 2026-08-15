@@ -240,7 +240,7 @@ function HomeSection({
 
   return (
     <section
-      className="relative my-20 overflow-hidden rounded-2xl p-0  sm:p-4 py-4 sm:py-0 shadow-sm"
+      className="relative my-20 overflow-hidden rounded-2xl p-0  sm:p-4 py-4 sm:py-4 shadow-sm"
       style={
         section.background === "color"
           ? { backgroundColor: section.color }
@@ -463,7 +463,10 @@ export default async function HomePage() {
             products={remainingProducts}
             title="Recommended For You"
           />
-        </section>
+
+        
+        
+            </section>
 
         <div className="px-4 py-4 ">
           <AdSidebar ads={ads} />
