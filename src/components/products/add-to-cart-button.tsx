@@ -545,7 +545,8 @@ export default function AddToCartButton({
       ) : null}
 
       {/* PURCHASE BUTTONS */}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-3 grid-cols-1">
+ 
         <button
           type="button"
           onClick={() => {
@@ -561,7 +562,7 @@ export default function AddToCartButton({
             void addProductToCart("cart");
           }}
           disabled={purchaseDisabled}
-          className="inline-flex min-h-14 items-center justify-center gap-2 rounded-lg bg-orange-500 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-orange-500 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
         >
           <ShoppingCart className="h-5 w-5" />
 
@@ -585,7 +586,7 @@ export default function AddToCartButton({
             void addProductToCart("buy");
           }}
           disabled={purchaseDisabled}
-          className="inline-flex min-h-14 items-center justify-center gap-2 rounded-lg bg-yellow-400 px-6 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-yellow-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-yellow-400 px-6 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-yellow-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
         >
           <ShoppingBag className="h-5 w-5" />
 

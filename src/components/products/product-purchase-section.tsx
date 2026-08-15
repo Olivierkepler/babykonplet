@@ -96,7 +96,7 @@ export default function ProductPurchaseSection({
         />
       </div>
 
-      {/* RIGHT: PRODUCT DETAILS */}
+      {/* RIGHT: PRODUCT DETAILS + BUYBOX */}
       <div className="min-w-0">
         <ProductInfo
           name={name}
@@ -107,17 +107,16 @@ export default function ProductPurchaseSection({
           stock={stock}
           averageRating={averageRating}
           reviewCount={reviewCount}
+          purchaseControls={
+            <AddToCartButton
+              productId={productId}
+              stock={stock}
+              variants={variants}
+              selectedColor={selectedColor}
+              onColorChange={setSelectedColor}
+            />
+          }
         />
-
-        <div className="mt-7 border-t border-[#E7EEF3] pt-7 sm:mt-8 sm:pt-8">
-          <AddToCartButton
-            productId={productId}
-            stock={stock}
-            variants={variants}
-            selectedColor={selectedColor}
-            onColorChange={setSelectedColor}
-          />
-        </div>
       </div>
     </div>
   );
