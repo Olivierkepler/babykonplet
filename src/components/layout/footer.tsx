@@ -41,7 +41,7 @@ export default function Footer() {
 
   return (
     <footer
-      className=" relative "
+      className="relative overflow-hidden"
       // style={{
       //   backgroundImage: "url(/images/background.png)",
       //   backgroundSize: "cover",
@@ -56,7 +56,7 @@ export default function Footer() {
           <div className="pointer-events-none absolute -right-4 top-24 h-16 w-16 rounded-full bg-[#FDEDE9]" />
           <div className="pointer-events-none absolute right-32 -top-6 h-10 w-10 rounded-full bg-[#FFF6DC]" />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-full px-6 lg:px-8">
         {/* Newsletter */}
         <div className="py-10">
           <div className="relative overflow-hidden  px-6 py-10 sm:px-10 lg:flex lg:items-center lg:justify-between lg:px-12">

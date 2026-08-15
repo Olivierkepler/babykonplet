@@ -33,23 +33,26 @@ import { signOut, useSession } from "next-auth/react";
 import { useCart } from "../cart/cart-context";
 import Image from "next/image";
 
+// TODO: replace with your real top-level storefront categories
+// (these are generic marketplace placeholders, not Baby Konplet's)
 const categoryLinks = [
-  { label: "Electronics", href: "/products?category=electronics" },
-  { label: "Fashion", href: "/products?category=fashion" },
-  { label: "Mobiles", href: "/products?category=mobiles" },
-  { label: "Beauty", href: "/products?category=beauty" },
-  { label: "Home", href: "/products?category=home" },
-  { label: "Appliances", href: "/products?category=appliances" },
+  { label: "New Arrivals", href: "/products?sort=newest" },
+  { label: "Dresses", href: "/products?productType=dresses" },
+  { label: "Tops", href: "/products?productType=tops" },
+  { label: "Outerwear", href: "/products?productType=jackets" },
+  { label: "Accessories", href: "/products?category=accessories" },
+  { label: "Sale", href: "/products?sort=price-low" },
 ];
 
-const DELIVERY_STORAGE_KEY = "djador-delivery-location";
+const DELIVERY_STORAGE_KEY = "baby-konplet-delivery-location";
 const DEFAULT_DELIVERY_LABEL = "Choose location";
 
-// Design tokens — keep the brand's navy/rose pair, but centralize the
-// exact values so hover/focus/shadow states stay consistent everywhere.
-const NAVY = "#0a2540";
-const ROSE = "#ff4f7b";
-const ROSE_HOVER = "#f13968";
+// Design tokens — centralized brand blue pair so hover/focus/shadow
+// states stay consistent across the header.
+const BRAND = "#63A0C7";
+const BRAND_HOVER = "#4F8CB5";
+const BRAND_TINT = "#EAF4F8";
+const INK = "#0f172a"; // slate-950
 
 type NavbarProps = {
   cartCount?: number;
@@ -429,37 +432,37 @@ export default function Navbar({
   }
 
   const iconActionClass =
-    "group relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-transparent  transition duration-200  hover:text-[#ff4f7b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2";
+    "group relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-transparent transition duration-200 hover:text-[#63A0C7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2";
 
   const popoverPanelClass =
-    "overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_24px_60px_-15px_rgba(10,37,64,0.18)]";
+    "overflow-hidden rounded-2xl border border-[#E7EEF3] bg-white shadow-[0_24px_60px_-15px_rgba(15,23,42,0.18)]";
 
   return (
     <>
-      <header className="sticky top-0 z-50  bg-white/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl">
         {/* Brand accent bar */}
-        <div className="h-[3px] w-full bg-gradient-to-r from-[#0a2540] via-[#ff4f7b] to-[#0a2540]" />
+        <div className="h-[3px] w-full bg-gradient-to-r from-[#4F8CB5] via-[#63A0C7] to-[#4F8CB5]" />
 
-        <div className="mx-auto flex h-[76px] max-w-[1600px] items-center gap-3 px-4 sm:px-6 lg:gap-6 xl:px-8">
+        <div className="mx-auto flex h-[76px] max-w-full items-center gap-3 px-4 sm:px-6 lg:gap-6 xl:px-8">
           {/* Logo */}
           <Link
             href="/"
-            aria-label="Baby Konple home"
-            className="group flex shrink-0 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
+            aria-label="Baby Konplet home"
+            className="group flex shrink-0 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
           >
             <Image
               src="/favicons/favicon-512x512.png"
-              alt="Baby Konple"
+              alt="Baby Konplet"
               width={100}
               height={100}
               priority
               className="h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105 sm:h-[68px] sm:w-[68px]"
             />
 
-            <span className="whitespace-nowrap text-lg font-bold tracking-tight text-[#0a2540] sm:text-xl">
+            <span className="whitespace-nowrap text-lg font-bold tracking-tight text-slate-950 sm:text-xl">
               Baby{" "}
-              <span className="text-[#ff4f7b]">
-                Konple
+              <span className="text-[#63A0C7]">
+                Konplet
               </span>
             </span>
           </Link>
@@ -483,7 +486,7 @@ export default function Navbar({
               placeholder="Search products, brands and categories"
               autoComplete="off"
               aria-label="Search products"
-              className="h-[50px] w-full rounded-full border border-slate-200 bg-slate-50 pl-13 pr-14 text-[15px] text-[#0a2540] outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#ff4f7b] focus:bg-white focus:ring-4 focus:ring-[#ff4f7b]/10"
+              className="h-[50px] w-full rounded-full border border-slate-200 bg-slate-50 pl-13 pr-14 text-[15px] text-slate-950 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#63A0C7] focus:bg-white focus:ring-4 focus:ring-[#63A0C7]/10"
               style={{ paddingLeft: "3.25rem" }}
             />
 
@@ -520,16 +523,16 @@ export default function Navbar({
                 }}
                 aria-expanded={locationOpen}
                 aria-haspopup="menu"
-                className="flex h-12 cursor-pointer items-center gap-2 rounded-xl px-3 text-left transition duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
+                className="flex h-12 cursor-pointer items-center gap-2 rounded-xl px-3 text-left transition duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
               >
-                <MapPin className="h-[18px] w-[18px] shrink-0 text-[#ff4f7b]" />
+                <MapPin className="h-[18px] w-[18px] shrink-0 text-[#63A0C7]" />
 
                 <span className="min-w-0">
                   <span className="block text-[10px] font-semibold uppercase tracking-wider leading-none text-slate-400">
                     Deliver to
                   </span>
 
-                  <span className="mt-1.5 block max-w-[130px] truncate text-sm font-bold leading-none text-[#0a2540]">
+                  <span className="mt-1.5 block max-w-[130px] truncate text-sm font-bold leading-none text-slate-950">
                     {deliveryLabel}
                   </span>
                 </span>
@@ -548,12 +551,12 @@ export default function Navbar({
                 >
                   <div className={popoverPanelClass}>
                     <div className="flex items-start gap-3 p-5">
-                      <div className="rounded-xl bg-[#fff0f4] p-2.5 text-[#ff4f7b]">
+                      <div className="rounded-xl bg-[#EAF4F8] p-2.5 text-[#63A0C7]">
                         <MapPin className="h-5 w-5" />
                       </div>
 
                       <div className="min-w-0">
-                        <p className="text-sm font-bold text-[#0a2540]">
+                        <p className="text-sm font-bold text-slate-950">
                           Delivery location
                         </p>
 
@@ -581,7 +584,7 @@ export default function Navbar({
                       <button
                         type="button"
                         onClick={openLocationModal}
-                        className="w-full cursor-pointer rounded-xl bg-[#ff4f7b] px-4 py-3 text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(255,79,123,0.55)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
+                        className="w-full cursor-pointer rounded-xl bg-[#63A0C7] px-4 py-3 text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(99,160,199,0.5)] transition hover:bg-[#4F8CB5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
                       >
                         {deliveryLabel ===
                         DEFAULT_DELIVERY_LABEL
@@ -615,9 +618,9 @@ export default function Navbar({
                 }}
                 aria-expanded={accountOpen}
                 aria-haspopup="menu"
-                className="flex h-12 cursor-pointer items-center gap-2.5 rounded-xl px-3 text-left transition duration-200 hover:text-[#ff4f7b] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
+                className="flex h-12 cursor-pointer items-center gap-2.5 rounded-xl px-3 text-left transition duration-200 hover:text-[#63A0C7] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#ff4f7b]">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#63A0C7]">
                   <User className="h-4 w-4" />
                 </span>
 
@@ -628,7 +631,7 @@ export default function Navbar({
                       : "Welcome"}
                   </span>
 
-                  <span className="mt-1.5 block max-w-[115px] truncate text-sm font-bold leading-none text-[#0a2540] ">
+                  <span className="mt-1.5 block max-w-[115px] truncate text-sm font-bold leading-none text-slate-950">
                     {displayName}
                   </span>
                 </span>
@@ -646,10 +649,10 @@ export default function Navbar({
                   className="absolute right-0 top-full z-50 w-[340px] pt-3"
                 >
                   <div className={popoverPanelClass}>
-                    <div className="border-b border-slate-100 bg-slate-50/60 p-5">
+                    <div className="border-b border-[#E7EEF3] bg-[#F2F9FC]/60 p-5">
                       {session?.user ? (
                         <>
-                          <p className="truncate text-base font-bold text-[#0a2540]">
+                          <p className="truncate text-base font-bold text-slate-950">
                             {session.user.name ||
                               "Your account"}
                           </p>
@@ -660,8 +663,8 @@ export default function Navbar({
                         </>
                       ) : (
                         <>
-                          <p className="text-base font-bold text-[#0a2540]">
-                            Welcome to Baby Konple
+                          <p className="text-base font-bold text-slate-950">
+                            Welcome to Baby Konplet
                           </p>
 
                           <p className="mt-1 text-xs leading-5 text-slate-500">
@@ -675,7 +678,7 @@ export default function Navbar({
                               onClick={
                                 closeDesktopMenus
                               }
-                              className="rounded-xl bg-[#ff4f7b] px-4 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(255,79,123,0.55)] transition hover:bg-[#f13968]"
+                              className="rounded-xl bg-[#63A0C7] px-4 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(99,160,199,0.5)] transition hover:bg-[#4F8CB5]"
                             >
                               Sign in
                             </Link>
@@ -685,7 +688,7 @@ export default function Navbar({
                               onClick={
                                 closeDesktopMenus
                               }
-                              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-bold text-[#0a2540] transition hover:border-[#ff4f7b] hover:bg-[#fff0f4]"
+                              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-bold text-slate-950 transition hover:border-[#63A0C7] hover:bg-[#EAF4F8]"
                             >
                               Register
                             </Link>
@@ -700,11 +703,11 @@ export default function Navbar({
                       </SectionLabel>
 
                       <AccountLink
-  href="/account/profile"
-  icon={User}
-  label="My profile"
-  onClick={closeDesktopMenus}
-/>
+                        href="/account/profile"
+                        icon={User}
+                        label="My profile"
+                        onClick={closeDesktopMenus}
+                      />
 
                       <AccountLink
                         href="/orders"
@@ -732,16 +735,16 @@ export default function Navbar({
                       <button
                         type="button"
                         onClick={openLocationModal}
-                        className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-[#0a2540]"
+                        className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
                       >
-                        <MapPin className="h-[18px] w-[18px] text-[#ff4f7b]" />
+                        <MapPin className="h-[18px] w-[18px] text-[#63A0C7]" />
 
                         <span className="flex-1">
                           Saved addresses
                         </span>
                       </button>
 
-                      <div className="my-3 border-t border-slate-100" />
+                      <div className="my-3 border-t border-[#E7EEF3]" />
 
                       <SectionLabel>
                         Customer care
@@ -763,19 +766,18 @@ export default function Navbar({
 
                       {session?.user && (
                         <>
-                          <div className="my-3 border-t border-slate-100" />
+                          <div className="my-3 border-t border-[#E7EEF3]" />
 
                           <button
                             type="button"
                             onClick={() =>
                               signOut({
-                                callbackUrl:
-                                  "/login",
+                                callbackUrl: "/login",
                               })
                             }
                             className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-bold text-rose-600 transition hover:bg-rose-50"
                           >
-                            <LogOut className="h-[18px] w-[18px] " />
+                            <LogOut className="h-[18px] w-[18px]" />
                             Sign out
                           </button>
                         </>
@@ -793,7 +795,7 @@ export default function Navbar({
               count={wishlistCount}
               className={iconActionClass}
             >
-              <Heart className="h-5 w-5 text-[#ff4f7b] hover:text-[#0a2540]" />
+              <Heart className="h-5 w-5 text-[#63A0C7] hover:text-[#4F8CB5]" />
             </HeaderIconLink>
 
             {/* Notifications */}
@@ -803,7 +805,7 @@ export default function Navbar({
               count={notificationCount}
               className={iconActionClass}
             >
-              <Bell className="h-5 w-5 text-[#ff4f7b] hover:text-[#0a2540]" />
+              <Bell className="h-5 w-5 text-[#63A0C7] hover:text-[#4F8CB5]" />
             </HeaderIconLink> */}
 
             {/* Cart */}
@@ -814,10 +816,10 @@ export default function Navbar({
                   ? `, ${cartCount} items`
                   : ""
               }`}
-              className="relative ml-2 flex h-12 items-center gap-2.5 cursor-pointer px-5 text-sm font-bold text-black transition duration-200 hover:scale-105 hover:text-[#ff4f7b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
+              className="relative ml-2 flex h-12 cursor-pointer items-center gap-2.5 px-5 text-sm font-bold text-slate-950 transition duration-200 hover:scale-105 hover:text-[#63A0C7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
             >
               <span className="relative">
-                <ShoppingCart className="h-5 w-5 text-[#ff4f7b] hover:text-[#0a2540]" />
+                <ShoppingCart className="h-5 w-5 text-[#63A0C7] hover:text-[#4F8CB5]" />
 
                 {cartCount > 0 && (
                   <span
@@ -830,8 +832,6 @@ export default function Navbar({
                   </span>
                 )}
               </span>
-
-              {/* <span>Cart</span> */}
             </Link>
 
             <style jsx>{`
@@ -939,7 +939,7 @@ export default function Navbar({
               }
               placeholder="Search products, brands and categories"
               aria-label="Search products"
-              className="h-11 w-full rounded-full border border-slate-200 bg-slate-50 pl-12 pr-11 text-sm text-[#0a2540] outline-none transition placeholder:text-slate-400 focus:border-[#ff4f7b] focus:bg-white focus:ring-4 focus:ring-[#ff4f7b]/10"
+              className="h-11 w-full rounded-full border border-slate-200 bg-slate-50 pl-12 pr-11 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-[#63A0C7] focus:bg-white focus:ring-4 focus:ring-[#63A0C7]/10"
             />
 
             {search && (
@@ -963,35 +963,35 @@ export default function Navbar({
             type="button"
             aria-label="Close navigation menu"
             onClick={closeMobileMenu}
-            className="absolute inset-0 cursor-pointer bg-[#0a2540]/50 backdrop-blur-[2px]"
+            className="absolute inset-0 cursor-pointer bg-slate-950/50 backdrop-blur-[2px]"
           />
 
           <aside
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
-            className="relative flex h-full w-[88%] max-w-sm flex-col bg-white shadow-[-24px_0_60px_-15px_rgba(10,37,64,0.25)]"
+            className="relative flex h-full w-[88%] max-w-sm flex-col bg-white shadow-[-24px_0_60px_-15px_rgba(15,23,42,0.25)]"
           >
             <div className="border-b border-slate-100 px-5 py-5">
               <div className="flex items-center justify-between gap-4">
                 <Link
                   href="/"
                   onClick={closeMobileMenu}
-                  aria-label="Baby Konple home"
-                  className="group flex items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
+                  aria-label="Baby Konplet home"
+                  className="group flex items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
                 >
                   <Image
                     src="/favicons/favicon-512x512.png"
-                    alt="Baby Konple"
+                    alt="Baby Konplet"
                     width={100}
                     height={100}
                     className="h-12 w-12 object-contain transition-transform duration-200 group-hover:scale-105"
                   />
 
-                  <span className="whitespace-nowrap text-lg font-bold tracking-tight text-[#0a2540]">
+                  <span className="whitespace-nowrap text-lg font-bold tracking-tight text-slate-950">
                     Baby{" "}
-                    <span className="text-[#ff4f7b]">
-                      Konple
+                    <span className="text-[#63A0C7]">
+                      Konplet
                     </span>
                   </span>
                 </Link>
@@ -1000,7 +1000,7 @@ export default function Navbar({
                   type="button"
                   onClick={closeMobileMenu}
                   aria-label="Close menu"
-                  className="group flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-500 transition duration-200 hover:bg-[#fff0f4] hover:text-[#ff4f7b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
+                  className="group flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-500 transition duration-200 hover:bg-[#EAF4F8] hover:text-[#63A0C7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
                 >
                   <X className="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" />
                 </button>
@@ -1012,7 +1012,7 @@ export default function Navbar({
                     Signed in as
                   </p>
 
-                  <p className="mt-0.5 truncate text-sm font-bold text-[#0a2540]">
+                  <p className="mt-0.5 truncate text-sm font-bold text-slate-950">
                     {session.user.name ||
                       session.user.email}
                   </p>
@@ -1038,9 +1038,9 @@ export default function Navbar({
               <button
                 type="button"
                 onClick={openLocationModal}
-                className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-800 transition hover:bg-[#fff0f4]"
+                className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-800 transition hover:bg-[#EAF4F8]"
               >
-                <MapPin className="h-5 w-5 text-[#ff4f7b]" />
+                <MapPin className="h-5 w-5 text-[#63A0C7]" />
 
                 <span className="min-w-0 flex-1">
                   <span className="block">
@@ -1112,7 +1112,7 @@ export default function Navbar({
                       onClick={
                         closeMobileMenu
                       }
-                      className="rounded-xl border border-slate-200 px-3 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#ff4f7b]/40 hover:bg-[#fff0f4] hover:text-[#0a2540]"
+                      className="rounded-xl border border-slate-200 px-3 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#63A0C7]/40 hover:bg-[#EAF4F8] hover:text-slate-950"
                     >
                       {category.label}
                     </Link>
@@ -1147,11 +1147,10 @@ export default function Navbar({
                   type="button"
                   onClick={() =>
                     signOut({
-                      callbackUrl:
-                        "https://www.djadorfamilystore.com/login",
+                      callbackUrl: "/login",
                     })
                   }
-                  className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#ff4f7b] px-4 py-3 text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(255,79,123,0.55)] transition hover:bg-[#f13968]"
+                  className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#63A0C7] px-4 py-3 text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(99,160,199,0.5)] transition hover:bg-[#4F8CB5]"
                 >
                   <LogOut className="h-4 w-4" />
                   Sign out
@@ -1161,7 +1160,7 @@ export default function Navbar({
                   <Link
                     href="/login"
                     onClick={closeMobileMenu}
-                    className="rounded-xl bg-[#ff4f7b] px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(255,79,123,0.55)] transition hover:bg-[#f13968]"
+                    className="rounded-xl bg-[#63A0C7] px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(99,160,199,0.5)] transition hover:bg-[#4F8CB5]"
                   >
                     Sign in
                   </Link>
@@ -1169,7 +1168,7 @@ export default function Navbar({
                   <Link
                     href="/register"
                     onClick={closeMobileMenu}
-                    className="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-bold text-[#0a2540] transition hover:border-[#ff4f7b] hover:bg-[#fff0f4]"
+                    className="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-bold text-slate-950 transition hover:border-[#63A0C7] hover:bg-[#EAF4F8]"
                   >
                     Register
                   </Link>
@@ -1182,7 +1181,7 @@ export default function Navbar({
 
       {/* Delivery location modal */}
       {locationModalOpen && (
-        <div className="fixed inset-0 z-[9999] flex justify-end bg-[#0a2540]/50 backdrop-blur-[2px]">
+        <div className="fixed inset-0 z-[9999] flex justify-end bg-slate-950/50 backdrop-blur-[2px]">
           <button
             type="button"
             aria-label="Close delivery location panel"
@@ -1194,24 +1193,23 @@ export default function Navbar({
             role="dialog"
             aria-modal="true"
             aria-labelledby="delivery-location-title"
-            className="relative h-full w-full max-w-lg overflow-y-auto bg-white p-6 shadow-[-24px_0_60px_-15px_rgba(10,37,64,0.25)] sm:p-8"
+            className="relative h-full w-full max-w-lg overflow-y-auto bg-white p-6 shadow-[-24px_0_60px_-15px_rgba(15,23,42,0.25)] sm:p-8"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                {/* <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff4f7b]">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#63A0C7]">
                   Delivery preferences
-                </p> */}
-                <br />
+                </p>
 
                 <h2
                   id="delivery-location-title"
-                  className="mt-2 text-2xl font-bold tracking-tight text-[#0a2540]"
+                  className="mt-2 text-2xl font-bold tracking-tight text-slate-950"
                 >
                   Select your delivery location
                 </h2>
 
                 <p className="mt-2 max-w-md text-sm leading-6 text-slate-500">
-                  Baby Konple currently delivers only
+                  Baby Konplet currently delivers only
                   within Massachusetts. Enter a ZIP code
                   or use your current location to check
                   availability.
@@ -1221,7 +1219,7 @@ export default function Navbar({
               <button
                 type="button"
                 onClick={closeLocationModal}
-                className="rounded-full cursor-pointer p-2 text-slate-500 transition hover:bg-[#fff0f4] hover:text-[#ff4f7b]"
+                className="cursor-pointer rounded-full p-2 text-slate-500 transition hover:bg-[#EAF4F8] hover:text-[#63A0C7]"
                 aria-label="Close location panel"
               >
                 <X className="h-6 w-6" />
@@ -1234,13 +1232,13 @@ export default function Navbar({
             >
               <label
                 htmlFor="delivery-zip"
-                className="text-sm font-bold text-[#0a2540]"
+                className="text-sm font-bold text-slate-950"
               >
                 ZIP code
               </label>
 
               <div className="relative mt-2">
-                <MapPin className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#ff4f7b]" />
+                <MapPin className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#63A0C7]" />
 
                 <input
                   ref={locationInputRef}
@@ -1259,7 +1257,7 @@ export default function Navbar({
                   }}
                   placeholder="Enter ZIP code"
                   maxLength={10}
-                  className="h-14 w-full rounded-2xl border border-slate-200 pl-12 pr-4 text-base text-[#0a2540] outline-none transition focus:border-[#ff4f7b] focus:ring-4 focus:ring-[#ff4f7b]/10"
+                  className="h-14 w-full rounded-2xl border border-slate-200 pl-12 pr-4 text-base text-slate-950 outline-none transition focus:border-[#63A0C7] focus:ring-4 focus:ring-[#63A0C7]/10"
                 />
               </div>
 
@@ -1277,7 +1275,7 @@ export default function Navbar({
               <button
                 type="submit"
                 disabled={locationLoading}
-                className="mt-4 w-full cursor-pointer rounded-xl bg-[#ff4f7b] px-4 py-3.5 text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(255,79,123,0.55)] transition hover:bg-[#f13968] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-4 w-full cursor-pointer rounded-xl bg-[#63A0C7] px-4 py-3.5 text-sm font-bold text-white shadow-[0_10px_25px_-8px_rgba(99,160,199,0.5)] transition hover:bg-[#4F8CB5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {locationLoading
                   ? "Finding your location..."
@@ -1299,13 +1297,13 @@ export default function Navbar({
               type="button"
               onClick={useCurrentLocation}
               disabled={locationLoading}
-              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3.5 text-sm font-bold text-[#0a2540] transition hover:border-[#ff4f7b] hover:bg-[#fff0f4] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3.5 text-sm font-bold text-slate-950 transition hover:border-[#63A0C7] hover:bg-[#EAF4F8] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <LocateFixed
                 className={`h-5 w-5 ${
                   locationLoading
-                    ? "animate-pulse text-[#ff4f7b]"
-                    : "text-[#ff4f7b]"
+                    ? "animate-pulse text-[#63A0C7]"
+                    : "text-[#63A0C7]"
                 }`}
               />
 
@@ -1383,7 +1381,7 @@ export default function Navbar({
                       </p>
 
                       <p className="mt-2 text-sm leading-6 text-rose-800">
-                        Baby Konple currently delivers
+                        Baby Konplet currently delivers
                         only within Massachusetts.
                         Please enter a Massachusetts ZIP
                         code.
@@ -1407,7 +1405,7 @@ export default function Navbar({
                 <button
                   type="button"
                   onClick={clearSavedLocation}
-                  className="mt-3 text-sm font-bold cursor-pointer text-emerald-800 underline underline-offset-4 transition hover:text-emerald-950"
+                  className="mt-3 cursor-pointer text-sm font-bold text-emerald-800 underline underline-offset-4 transition hover:text-emerald-950"
                 >
                   Remove saved location
                 </button>
@@ -1455,16 +1453,16 @@ function AccountLink({
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-[#0a2540]"
+      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
     >
-      <Icon className="h-[18px] w-[18px] text-[#ff4f7b]" />
+      <Icon className="h-[18px] w-[18px] text-[#63A0C7]" />
 
       <span className="flex-1">
         {label}
       </span>
 
       {badge > 0 && (
-        <span className="inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#ff4f7b] px-1.5 text-[10px] font-bold text-white">
+        <span className="inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#63A0C7] px-1.5 text-[10px] font-bold text-white">
           {badge > 99 ? "99+" : badge}
         </span>
       )}
@@ -1500,7 +1498,7 @@ function HeaderIconLink({
         <CountBadge count={count} />
       )}
 
-      <span className="pointer-events-none absolute top-[calc(100%+8px)] z-50 whitespace-nowrap rounded-md bg-[#0a2540] px-2 py-1 text-[11px] font-semibold text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-visible:opacity-100">
+      <span className="pointer-events-none absolute top-[calc(100%+8px)] z-50 whitespace-nowrap rounded-md bg-slate-950 px-2 py-1 text-[11px] font-semibold text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-visible:opacity-100">
         {label}
       </span>
     </Link>
@@ -1513,7 +1511,7 @@ function CountBadge({
   count: number;
 }) {
   return (
-    <span className="absolute -right-1.5 -top-1.5 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#ff4f7b] px-1 text-[10px] font-bold leading-none text-white ring-2 ring-white">
+    <span className="absolute -right-1.5 -top-1.5 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#63A0C7] px-1 text-[10px] font-bold leading-none text-white ring-2 ring-white">
       {count > 99 ? "99+" : count}
     </span>
   );
@@ -1536,16 +1534,16 @@ function MobileMenuLink({
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-800 transition hover:bg-[#fff0f4]"
+      className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-800 transition hover:bg-[#EAF4F8]"
     >
-      <Icon className="h-5 w-5 text-[#ff4f7b]" />
+      <Icon className="h-5 w-5 text-[#63A0C7]" />
 
       <span className="flex-1">
         {label}
       </span>
 
       {badge > 0 && (
-        <span className="inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#ff4f7b] px-1.5 text-[10px] font-bold text-white">
+        <span className="inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#63A0C7] px-1.5 text-[10px] font-bold text-white">
           {badge > 99 ? "99+" : badge}
         </span>
       )}

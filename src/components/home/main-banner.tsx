@@ -4,7 +4,7 @@ export default function MainBanner() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid min-h-[420px] items-center rounded-3xl bg-gradient-to-r from-blue-700 to-blue-500 p-10 lg:grid-cols-2">
+        <div className="grid min-h-[420px] items-center rounded-3xl bg-gradient-to-r from-blue-700 to-blue-500 p-6 lg:p-10 lg:grid-cols-2">
           
           <div>
             <p className="text-white/80 font-semibold uppercase">

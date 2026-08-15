@@ -4,8 +4,8 @@ import SiteShell from "../components/layout/site-shell";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: "DJADOR FAMILY STORE",
-  description: "Your trusted online shopping destination",
+  title: "Baby Konplet",
+  description: "Soft, sized-right baby clothing — your trusted online shopping destination",
 
   icons: {
     icon: [
@@ -18,19 +18,21 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-white text-slate-900 antialiased">
+    <html lang="en" className="overflow-x-hidden">
+      <body className="min-h-screen overflow-x-hidden bg-white text-slate-900 antialiased">
         <Providers>
-          <SiteShell>{children}</SiteShell>
+          <SiteShell>
+            <div className="mx-auto w-full max-w-full">{children}</div>
+          </SiteShell>
         </Providers>
       </body>
     </html>
   );
 }
+

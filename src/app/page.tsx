@@ -7,7 +7,23 @@ import AdSidebar from "../components/layout/ad-sidebar";
 import { prisma } from "../lib/prisma";
 import { getActivePromoBanners, getActiveAdSlots } from "../lib/content";
 
-const sidebarCategories = [
+type SidebarItem = {
+  name: string;
+  href: string;
+  icon:
+    | "Store"
+    | "UserRound"
+    | "UsersRound"
+    | "Sparkles"
+    | "SprayCan"
+    | "Shirt"
+    | "ShoppingBag"
+    | "Home"
+    | "Utensils"
+    | "BrushCleaning";
+};
+
+const sidebarCategories: SidebarItem[] = [
   { name: "All Products", href: "/products?section=discover", icon: "Store" },
   { name: "Women", href: "/products?category=women", icon: "UserRound" },
   { name: "Men", href: "/products?category=men", icon: "UsersRound" },
@@ -21,7 +37,7 @@ const sidebarCategories = [
   { name: "Cleaning", href: "/products?category=cleaning", icon: "BrushCleaning" },
   { name: "Wigs", href: "/products?category=wigs", icon: "UsersRound" },
   { name: "Personal Care", href: "/products?category=personal-care", icon: "Sparkles" },
-] as const;
+];
 
 type SectionItem = {
   name: string;
@@ -42,9 +58,7 @@ const sections: Section[] = [
   {
     title: "Best Value Deals on Fashion",
     background: "image",
-    // color: "#ffffff",
     src: "/images/fashion/bg1.png",
-    // Arrow shows Women, Men, Shoes and Bags only
     href: "/products?section=fashion",
 
     items: [
@@ -78,8 +92,6 @@ const sections: Section[] = [
     title: "Beauty & Hair Care",
     background: "image",
     src: "/images/fashion/bg1.png",
-
-    // Arrow shows Beauty, Hair Care, Wigs and Personal Care only
     href: "/products?section=beauty-care",
 
     items: [
@@ -112,11 +124,7 @@ const sections: Section[] = [
   {
     title: "Everyday Essentials",
     background: "image",
-    // color: "#ffffff",
-
     src: "/images/fashion/bg1.png",
-
-    // Arrow shows Food, Home, Kitchen and Cleaning only
     href: "/products?section=everyday-essentials",
 
     items: [
@@ -217,18 +225,14 @@ function HomeSection({
   const isImageBackground = section.background === "image";
 
   // Light/white color backgrounds need dark heading text; image
-  // backgrounds (with a dark overlay below) and darker colors need
-  // white heading text. Adjust this check if you add darker solid
-  // colors later — for now, only white/near-white is treated as light.
+  // backgrounds and darker colors also use dark heading text here.
+  // Adjust this check if you add darker solid colors later — for
+  // now, only white/near-white is treated as light.
   const isLightColorBackground =
     section.background === "color" &&
     ["#fff", "#ffffff"].includes(section.color.toLowerCase());
 
-  const headingTextClass =
-    isImageBackground || !isLightColorBackground
-      ? "text-[#23425b]"
- 
-      : "text-slate-950";
+  const headingTextClass = "text-slate-950";
 
   const arrowButtonClass = isLightColorBackground
     ? "bg-slate-950 text-white shadow hover:bg-slate-800"
@@ -274,32 +278,32 @@ function HomeSection({
         </div>
 
         <div className="grid gap-4 rounded-xl p-3 sm:grid-cols-2 lg:grid-cols-4">
-  {availableItems.map((item) => (
-    <Link
-      key={item.name}
-      href={item.href}
-      className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_10px_-4px_rgba(10,37,64,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-12px_rgba(10,37,64,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff4f7b] focus-visible:ring-offset-2"
-    >
-      <div className="flex h-72 items-center justify-center overflow-hidden ">
-        <img
-          src={previews[item.category]}
-          alt={item.name}
-          className="max-h-full max-w-full object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-105"
-        />
-      </div>
+          {availableItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_10px_-4px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-12px_rgba(15,23,42,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
+            >
+              <div className="flex h-72 items-center justify-center overflow-hidden">
+                <img
+                  src={previews[item.category]}
+                  alt={item.name}
+                  className="max-h-full max-w-full object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-105"
+                />
+              </div>
 
-      <div className="px-3.5 py-3">
-        <h3 className="line-clamp-1 text-[15px] font-semibold text-slate-900">
-          {item.name}
-        </h3>
+              <div className="px-3.5 py-3">
+                <h3 className="line-clamp-1 text-[15px] font-semibold text-slate-900">
+                  {item.name}
+                </h3>
 
-        <p className="mt-1 text-sm font-bold text-[#ff4f7b]">
-          {item.offer}
-        </p>
-      </div>
-    </Link>
-  ))}
-</div>
+                <p className="mt-1 text-sm font-bold text-[#4F8CB5]">
+                  {item.offer}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -348,12 +352,12 @@ function ProductGrid({
             href={`/products/${product.slug}`}
             className="group"
           >
-            <div className="relative flex  items-center justify-center overflow-hidden rounded-xl bg-white">
+            <div className="relative flex items-center justify-center overflow-hidden rounded-xl bg-white">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="h-full w-full object-cover transition duration-300 group-hover:scale-102"
+                  className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                 />
               ) : (
                 <span className="text-sm font-semibold text-slate-400">
@@ -362,21 +366,21 @@ function ProductGrid({
               )}
             </div>
 
-          <div className="flex flex-col items-center justify-center">
-          <div className="flex flex-col items-start justify-start">
-          <h3 className="mt-2 line-clamp-1 text-sm font-semibold text-slate-900">
-              {product.name}
-            </h3>
+            <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-start justify-start">
+                <h3 className="mt-2 line-clamp-1 text-sm font-semibold text-slate-900">
+                  {product.name}
+                </h3>
 
-            <p className="mt-1 text-sm font-black text-slate-950">
-              {formatPrice(product.price)}
-            </p>
+                <p className="mt-1 text-sm font-black text-slate-950">
+                  {formatPrice(product.price)}
+                </p>
 
-            <p className="mt-1 text-xs font-semibold text-blue-600">
-              Special offer + more
-            </p>
-          </div>
-          </div>
+                <p className="mt-1 text-xs font-semibold text-blue-600">
+                  Special offer + more
+                </p>
+              </div>
+            </div>
           </Link>
         ))}
       </div>
@@ -411,10 +415,10 @@ export default async function HomePage() {
   const secondFourProducts = latestProducts.slice(4, 8);
   const remainingProducts = latestProducts.slice(8);
 
-  return (
-    <main className="bg-[#ffffff] ">
-      <div className="mx-auto flex max-w-full sm:px-4">
-        <CollapsibleSidebar items={sidebarCategories as any} title="Shop by category" />
+ return (
+    <main className="bg-[#ffffff] min-h-screen">
+      <div className="mx-auto flex-1 max-w-full gap-6 px-4 py-6 sm:px-6 lg:gap-8  lg:flex">
+        <CollapsibleSidebar items={sidebarCategories} title="Shop by category" />
 
         <section className="min-w-0 flex-1 px-4 py-4">
           <nav
@@ -459,8 +463,8 @@ export default async function HomePage() {
           />
         </section>
 
-        <div className="px-4 py-4">
-          <AdSidebar ads={ads} /> 
+        <div className="px-4 py-4 ">
+          <AdSidebar ads={ads} />
         </div>
       </div>
     </main>
