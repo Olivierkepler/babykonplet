@@ -240,7 +240,7 @@ function HomeSection({
 
   return (
     <section
-      className="relative my-20 overflow-hidden rounded-2xl p-4 shadow-sm"
+      className="relative my-20 overflow-hidden rounded-2xl p-0  sm:p-4 py-4 sm:py-0 shadow-sm"
       style={
         section.background === "color"
           ? { backgroundColor: section.color }
@@ -263,7 +263,7 @@ function HomeSection({
       )}
 
       <div className="relative">
-        <div className="mb-3 flex items-center justify-between">
+        <div className="mb-3 flex items-center justify-between px-3 sm:px-6">
           <h2 className={`text-2xl font-black ${headingTextClass}`}>
             {section.title}
           </h2>
@@ -275,6 +275,8 @@ function HomeSection({
           >
             <ArrowRight className="h-5 w-5" />
           </Link>
+
+          
         </div>
 
         <div className="grid gap-4 rounded-xl p-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -329,7 +331,7 @@ function ProductGrid({
   }
 
   return (
-    <section className="mt-6 rounded-xl bg-white p-5 shadow-sm">
+    <section className="mt-6 rounded-xl bg-white p-5  shadow-sm ">
       {title && (
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-2xl font-black text-slate-900">
@@ -417,7 +419,7 @@ export default async function HomePage() {
 
  return (
     <main className="bg-[#ffffff] min-h-screen">
-      <div className="mx-auto flex-1 max-w-full gap-6 px-4 py-6 sm:px-6 lg:gap-8  lg:flex">
+      <div className="mx-auto flex-1 max-w-full gap-6 px-0 py-6 sm:px-6 lg:gap-8  lg:flex">
         <CollapsibleSidebar items={sidebarCategories} title="Shop by category" />
 
         <section className="min-w-0 flex-1 px-4 py-4">
