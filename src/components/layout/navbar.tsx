@@ -450,19 +450,20 @@ export default function Navbar({
             aria-label="Baby Konplet home"
             className="group flex shrink-0 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63A0C7] focus-visible:ring-offset-2"
           >
-            <Image
+            {/* <Image
               src="/favicons/favicon-512x512.png"
               alt="Baby Konplet"
               width={100}
               height={100}
               priority
               className="h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105 sm:h-[68px] sm:w-[68px]"
-            />
+            /> */}
+            <Image src="/logo.png" alt="Djadorde Family Store" width={100} height={100} />
 
             <span className="whitespace-nowrap text-lg font-bold tracking-tight text-slate-950 sm:text-xl">
-              Baby{" "}
+              Djadorde {" "}
               <span className="text-[#63A0C7]">
-                Konplet
+              Family Store
               </span>
             </span>
           </Link>

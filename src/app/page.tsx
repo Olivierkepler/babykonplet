@@ -254,7 +254,7 @@ function HomeSection({
             alt=""
             fill
             className="object-cover"
-            sizes="100vw"
+            sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 75vw, 60vw"
           />
           {/* Dark scrim so the white heading/arrow stay readable
               regardless of what's in the background image. */}
